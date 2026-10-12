@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISE 39081 | Ams Robotics</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="main.css">
+    
     <!-- Thư viện Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -35,29 +38,31 @@
     <!-- HERO SECTION -->
     <main class="hero-section">
         <div class="text-content">
-            <h1 class="main-title">
-                AMS <br>
-                ROBO<span class="special-t">t</span>ICS
-            </h1>
-            <p class="description">Ams Robotics Innovation And Science Engineering</p>
+            <h10 class="main-title">
+                Ams Robotics <br>
+                Innovation Science<br>
+                Engineering
+            </h10>
+            <p class="description">Hanoi-Amsterdam Hight School for Gifted</p>
         </div>
 
-        <!-- KHUNG CHỨA 3D LÕI CÔNG NGHỆ -->
+        <!-- KHUNG CHỨA 3D HẠC CÔNG NGHỆ -->
         <div class="robot-3d-wrapper">
             <div id="robot-canvas-container"></div>
             <div class="drag-hint">DRAG TO EXPLORE</div>
         </div>
     </main>
 
-    <!-- SCRIPT TẠO LÕI NĂNG LƯỢNG (SCIENCE CORE) -->
+    <!-- SCRIPT TẠO HẠC ORIGAMI ĐẶC (SOLID LOW-POLY) -->
     <script>
         const container = document.getElementById('robot-canvas-container');
         const width = container.clientWidth;
         const height = container.clientHeight;
 
         const scene = new THREE.Scene();
+        // Camera nhìn chéo
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        camera.position.set(0, 0, 30); // Đặt camera nhìn thẳng vào khối
+        camera.position.set(10, 7, 14); 
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
@@ -69,35 +74,121 @@
         controls.dampingFactor = 0.05;
         controls.enableZoom = true;
 
-        const coreGroup = new THREE.Group();
-        scene.add(coreGroup);
+        // --- ĐÁNH SÁNG MÔI TRƯỜNG (RẤT QUAN TRỌNG ĐỂ THẤY KHỐI ĐẶC) ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
 
-        // Tạo hình khối đa diện (Icosahedron - Biểu tượng của sự sáng tạo khoa học)
-        // Số 2 ở cuối là độ chi tiết (chia nhỏ các mặt)
-        const geometry = new THREE.IcosahedronGeometry(9, 2);
+        // Đèn hắt từ phía trên bên phải (Màu xanh tím lơ)
+        const dirLight = new THREE.DirectionalLight(0x8da4ff, 2.5);
+        dirLight.position.set(10, 15, 10);
+        scene.add(dirLight);
 
-        // 1. Lớp lưới màu xanh tím
-        const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.35 });
-        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMaterial);
-        coreGroup.add(wireframe);
+        // Đèn hắt từ phía dưới bên trái (Màu cam gradient)
+        const backLight = new THREE.DirectionalLight(0xf59e0b, 1.5);
+        backLight.position.set(-10, -5, -10);
+        scene.add(backLight);
 
-        // 2. Lớp hạt sáng (Các điểm giao nhau)
-        const pointsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.9 });
-        const points = new THREE.Points(geometry, pointsMaterial);
-        coreGroup.add(points);
+        const birdGroup = new THREE.Group();
+        scene.add(birdGroup);
+
+        /* --- TỌA ĐỘ CÁC ĐIỂM HẠC ORIGAMI --- */
+        const vertices = new Float32Array([
+            5.0,  3.0,  0.0,   // 0: Mỏ
+            3.5,  4.5,  0.0,   // 1: Đỉnh đầu
+            3.0,  2.5,  0.0,   // 2: Cổ trên
+            1.0, -1.0,  0.0,   // 3: Ngực
+           -2.0, -1.0,  0.0,   // 4: Bụng sau
+           -5.0,  3.0,  0.0,   // 5: Chóp đuôi
+            0.0,  1.5,  0.0,   // 6: Lưng giữa
+            1.0,  1.0,  1.0,   // 7: Cổ trái
+           -1.5,  1.0,  1.0,   // 8: Gốc đuôi trái
+           -2.0,  5.0,  5.0,   // 9: Đỉnh cánh trái
+            0.0,  0.5,  2.0,   // 10: Khớp cánh trái dưới
+            1.0,  1.0, -1.0,   // 11: Cổ phải
+           -1.5,  1.0, -1.0,   // 12: Gốc đuôi phải
+           -2.0,  5.0, -5.0,   // 13: Đỉnh cánh phải
+            0.0,  0.5, -2.0    // 14: Khớp cánh phải dưới
+        ]);
+
+        const indices = [
+            0, 1, 2,  2, 1, 7,  2, 11, 1,  2, 7, 3,  2, 3, 11,
+            7, 1, 6,  11, 6, 1,
+            7, 3, 10,  11, 14, 3,  10, 3, 4,  14, 4, 3,  8, 10, 4,  12, 4, 14,
+            7, 6, 10,  11, 14, 6,  10, 6, 8,  14, 12, 6,
+            8, 6, 5,  12, 5, 6,  8, 5, 4,  12, 4, 5,
+            7, 10, 9,  10, 8, 9,  8, 6, 9,  7, 9, 6,
+            11, 13, 14,  14, 13, 12,  12, 13, 6,  11, 6, 13
+        ];
+
+        const craneGeo = new THREE.BufferGeometry();
+        craneGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        craneGeo.setIndex(indices);
+        craneGeo.computeVertexNormals();
+
+        /* --- 1. LỚP VỎ ĐẶC (SOLID MESH) --- */
+        // Vật liệu bóng, tối màu, phản chiếu ánh sáng cắt gọt (flatShading)
+        const solidMat = new THREE.MeshPhysicalMaterial({
+            color: 0x111827,       // Màu xanh đen huyền bí
+            metalness: 0.8,        // Độ kim loại
+            roughness: 0.2,        // Bề mặt bóng
+            side: THREE.DoubleSide, 
+            flatShading: true,     // Rất quan trọng: Tạo góc cạnh sắc nét của Origami
+            transparent: true,
+            opacity: 0.95
+        });
+        const craneSolid = new THREE.Mesh(craneGeo, solidMat);
+        birdGroup.add(craneSolid);
+
+        /* --- 2. VIỀN SÁNG SẮC NÉT --- */
+        // Tạo đường viền phát sáng ở các nếp gấp
+        const edges = new THREE.EdgesGeometry(craneGeo);
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.7 });
+        const craneWire = new THREE.LineSegments(edges, wireMat);
+        birdGroup.add(craneWire);
+
+        /* --- 3. LÕI NĂNG LƯỢNG (TRÁI TIM) --- */
+        // Khối đa diện phát sáng tự thân
+        const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
+        const coreMat = new THREE.MeshStandardMaterial({ 
+            color: 0xffffff,
+            emissive: 0x5a189a, // Hắt màu tím/cam
+            emissiveIntensity: 1.5,
+            flatShading: true 
+        });
+        const heartCore = new THREE.Mesh(coreGeo, coreMat);
+        heartCore.position.set(0.5, 0.5, 0);
+        
+        // Đèn nội tại phát ra từ lõi để chiếu sáng lòng ngực
+        const coreLight = new THREE.PointLight(0x8da4ff, 2, 8);
+        heartCore.add(coreLight);
+        
+        birdGroup.add(heartCore);
+
+        // Chỉnh góc cho hạc
+        birdGroup.rotation.z = Math.PI / 12;
+
+        const clock = new THREE.Clock();
 
         // Vòng lặp chuyển động
         function animate() {
             requestAnimationFrame(animate);
-            // Cho khối tự động xoay lơ lửng đa chiều
-            coreGroup.rotation.y += 0.002;
-            coreGroup.rotation.x += 0.001; 
+            const time = clock.getElapsedTime();
+
+            // Hạc xoay vòng và nhấp nhô nhẹ
+            birdGroup.rotation.y = time * 0.2;
+            birdGroup.position.y = Math.sin(time * 1.5) * 0.4;
+
+            // Trái tim đập (phóng to thu nhỏ nhẹ) và xoay nhanh hơn
+            heartCore.rotation.x -= 0.02;
+            heartCore.rotation.y += 0.03;
+            heartCore.scale.setScalar(1 + Math.sin(time * 4) * 0.15); // Hiệu ứng nhịp đập
+
             controls.update();
             renderer.render(scene, camera);
         }
         animate();
 
-        // Tự động căn chỉnh khi đổi kích thước màn hình
+        // Căn chỉnh khi đổi kích thước màn hình
         window.addEventListener('resize', () => {
             const newWidth = container.clientWidth;
             const newHeight = container.clientHeight;
