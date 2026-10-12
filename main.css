@@ -5,7 +5,7 @@
   --bg-dark: #07080c;
   --text-white: #ffffff;
   --text-gray: #9ca3af;
-  --accent-blue: #8da4ff; /* Màu xanh lơ cho chữ cái đầu */
+  --accent-blue: #8da4ff; /* Xanh lơ công nghệ */
 }
 
 * { 
@@ -41,25 +41,6 @@ body {
 
 .navbar:hover {
   transform: scale(1.05); 
-   2. NAVIGATION BAR & HOVER MENU
-   ========================================================================== */
-.navbar { 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 15px 50px; 
-  z-index: 1000;
-  
-  /* Nền kính mờ (Glassmorphism) */
-  background: rgba(248, 249, 250, 0.85); 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
 }
 
 .nav-left {
@@ -79,68 +60,6 @@ body {
   font-size: 0.75rem;
   letter-spacing: 2px;
   line-height: 1.4;
-.logo-img { 
-  height: 75px; 
-  object-fit: contain; 
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12)); 
-  transition: transform 0.3s ease;
-}
-
-/* Hover phóng to logo */
-.logo-img:hover {
-  transform: scale(1.08);
-}
-
-.nav-links {
-  display: flex;
-  gap: 40px; 
-  list-style: none;
-}
-
-.nav-links li a {
-  text-decoration: none;
-  color: var(--primary-text);
-  font-weight: 600;
-  font-size: 1.1rem;
-  position: relative;
-  padding: 5px 0;
-  transition: color 0.3s ease;
-}
-
-/* Gạch chân ẩn */
-.nav-links li a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: linear-gradient(to right, var(--grad-start), var(--grad-end)); 
-  border-radius: 2px;
-  transition: width 0.3s ease; 
-}
-
-/* Hover chữ đổi màu cam và gạch chân chạy ra */
-.nav-links li a:hover {
-  color: var(--grad-end); 
-}
-
-.nav-links li a:hover::after {
-  width: 100%; 
-}
-
-/* ==========================================================================
-   3. HERO SECTION (PAGE 1)
-   ========================================================================== */
-.main-content { 
-  position: relative;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  min-height: 100vh; 
-  padding: 80px 20px 0 20px; /* Thêm padding-top để tránh kẹt dưới navbar */
-  text-align: center; 
 }
 
 .brand-title { font-weight: 600; }
@@ -163,24 +82,6 @@ body {
   letter-spacing: 2px;
   font-weight: 500;
   transition: color 0.3s ease;
-.hero-title { 
-  margin-bottom: 1.2rem;
-  /* Dùng clamp để chữ tự động co giãn to nhỏ theo màn hình */
-  font-size: clamp(2.5rem, 6vw, 6rem); 
-  font-weight: 900; 
-  line-height: 1.1; 
-  letter-spacing: -0.025em; 
-  background: linear-gradient(to right, var(--grad-start), var(--grad-end)); 
-  -webkit-background-clip: text; 
-  background-clip: text; 
-  color: transparent; 
-}
-
-.subtitle { 
-  font-size: clamp(1rem, 2vw, 1.5rem); 
-  font-weight: 500; 
-  color: var(--secondary-text); 
-  letter-spacing: 0.025em; 
 }
 
 .nav-right a:hover { color: var(--accent-blue); }
@@ -191,22 +92,8 @@ body {
 .hero-section {
   display: flex;
   height: 100vh;
-  padding: 120px 60px 0 60px; /* Tránh đè Navbar */
+  padding: 120px 60px 0 60px; /* Đẩy xuống tránh đè Navbar */
   align-items: center; 
-.scroll-indicator { 
-  position: absolute; 
-  bottom: 30px; 
-  left: 50%; 
-  z-index: 50;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 8px; 
-  color: var(--secondary-text); 
-  text-decoration: none; 
-  user-select: none; 
-  transform: translateX(-50%); 
-  transition: color 0.3s ease; 
 }
 
 /* --- Cột Chữ (Bên trái) --- */
@@ -226,18 +113,9 @@ body {
 /* SỬ DỤNG CSS GRID ĐỂ CĂN THẲNG TRỤC CHỮ A-R-I-S-E */
 .title-row {
   display: grid;
-  grid-template-columns: 85px auto; /* Cố định 85px cho chữ cái đầu */
+  grid-template-columns: 85px auto; /* Cột 1 rộng 85px chứa chữ cái đầu */
   align-items: baseline; 
-  line-height: 1.1; 
-.scroll-text { 
-  font-size: 0.9rem; 
-  font-weight: 500; 
-  letter-spacing: 0.02em; 
-  white-space: nowrap; 
-}
-
-.scroll-arrow { 
-  animation: scrollBounce 2s infinite ease-in-out; 
+  line-height: 1.1; /* Tăng khoảng cách dòng lên một chút */
 }
 
 .first-letter {
@@ -246,7 +124,7 @@ body {
   font-size: clamp(3.5rem, 6.5vw, 7rem); /* Làm chữ to lên một chút */
   text-align: center; /* Đảm bảo căn giữa trong cột 85px */
   
-  /* Đổ màu gradient và glow phát sáng xanh lơ không viền */
+  /* Hiệu ứng màu gradient chìm và phát sáng xanh lơ */
   background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -258,16 +136,6 @@ body {
   font-size: clamp(3rem, 5.5vw, 5.5rem);
   font-weight: 900;
   letter-spacing: -0.02em;
-/* ==========================================================================
-   5. ABOUT US (PAGE 2)
-   ========================================================================== */
-.page-two { 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  min-height: 100vh; 
-  padding: 100px 50px; 
-  background-color: var(--bg-color); 
 }
 
 .description {
@@ -338,7 +206,7 @@ body {
   }
 
   .title-row {
-    grid-template-columns: 60px auto; 
+    grid-template-columns: 60px auto; /* Thu nhỏ cột chữ cái đầu trên mobile */
   }
 
   .first-letter {
@@ -363,37 +231,4 @@ body {
   }
   
   .drag-hint { bottom: 10px; }
-}
-.about-title { 
-  margin-bottom: 1.5rem;
-  color: #000; 
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900; 
-}
-
-.about-content { 
-  max-width: 800px;
-  color: #374151;
-  font-size: 1.1rem; 
-  line-height: 1.6; 
-}
-
-/* ==========================================================================
-   6. RESPONSIVE CHO ĐIỆN THOẠI
-   ========================================================================== */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column; /* Đẩy menu xuống dưới logo trên mobile */
-    padding: 15px 20px;
-    gap: 15px;
-  }
-  .nav-links {
-    gap: 20px;
-  }
-  .nav-links li a {
-    font-size: 1rem;
-  }
-  .page-two {
-    padding: 60px 20px;
-  }
 }
