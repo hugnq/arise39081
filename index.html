@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Nhúng cả 2 font: Inter cho chữ thường, Space Grotesk cho chữ cái đầu -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="main.css">
     
@@ -19,6 +20,8 @@
 <body>
 
     <!-- NAVBAR -->
+    
+    <!-- NAVIGATION BAR (Đã có Menu) -->
     <nav class="navbar">
         <div class="nav-left">
             <img src="logo-arise-round.png" alt="ARISE Logo" class="logo-img" onerror="this.style.display='none'">
@@ -35,6 +38,13 @@
             <a href="#">UPDATES</a>
             <a href="#">CONTACT</a>
         </div>
+        
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#more">About Us</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
     </nav>
 
     <!-- HERO SECTION -->
@@ -63,6 +73,17 @@
                     <span class="rest-letter">ngineering</span>
                 </div>
             </div>
+    <!-- PAGE 1: HERO SECTION -->
+    <main class="main-content">
+        <div class="text-container">
+            <h1 class="hero-title">
+                Ams Robotics <br>
+                Innovation and <br>
+                Science Engineering
+            </h1>
+            <p class="subtitle">
+                From Hanoi-Amsterdam High School for Gifted
+            </p>
         </div>
 
         <!-- KHUNG CHỨA HẠC ORIGAMI 3D -->
@@ -191,6 +212,16 @@
                 renderer.render(scene, camera);
             }
             animate();
+    
+    <!-- PAGE 2: ABOUT SECTION -->
+    <section id="more" class="page-two">
+        <div class="about-container">
+            <h2 class="about-title">About us</h2>
+            <p class="about-content">
+                Nội dung giới thiệu chi tiết về câu lạc bộ ARISE 39081 sẽ được đặt tại đây...
+            </p>
+        </div>
+    </section>
 
             window.addEventListener('resize', () => {
                 const newWidth = container.clientWidth;
