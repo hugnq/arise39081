@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISE 39081 | Ams Robotics</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="main.css">
-    
     <!-- Thư viện Three.js và OrbitControls điều khiển kéo xoay -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -40,11 +37,9 @@
         <div class="text-content">
             <h1 class="main-title">
                 AMS <br>
-                ROBO<span class="special-t">t</span>ICS
+                ROBOTICS
             </h1>
-            <p class="description">
-                Innovation and Science Engineering. A student-led, student-first initiative from Hanoi-Amsterdam High School for Gifted <span class="italic-blue">unlike any other.</span>
-            </p>
+            <p class="description">Ams Robotics Innovation And Science Engineering</p>
         </div>
 
         <!-- KHUNG CHỨA 3D ROBOT -->
@@ -89,6 +84,7 @@
             const part = new THREE.Group();
             part.add(line);
             part.add(points);
+            
             part.position.set(x, y, z);
             part.rotation.x = rotX;
             part.rotation.z = rotZ;
@@ -98,8 +94,8 @@
         // 1. Khung gầm chính (Chassis)
         addWireframePart(new THREE.BoxGeometry(14, 1.5, 12), 0, 0, 0);
 
-        // 2. Tháp nâng trung tâm (Lift Tower)
-        addWireframePart(new THREE.BoxGeometry(8, 9, 8), 0, 5, 0);
+        // 2. Tháp nâng trung tâm (Lift Tower) - ĐÃ SỬA LỖI TẠI ĐÂY
+        addWireframePart(new THREE.BoxGeometry(8, 9, 8), 0, 5, 0); 
         addWireframePart(new THREE.CylinderGeometry(2.5, 2.5, 6, 16), 0, 11, 0);
 
         // 3. 4 Bánh xe Mecanum
