@@ -1,11 +1,13 @@
 /* ==========================================================================
-   1. BIẾN MÀU SẮC & THIẾT LẬP CƠ BẢN
+   1. VARIABLES & RESET
    ========================================================================== */
 :root {
-  --bg-dark: #07080c;
-  --text-white: #ffffff;
-  --text-gray: #9ca3af;
-  --accent-blue: #8da4ff; /* Màu xanh lơ cho chữ cái đầu */
+  --primary-text: #111827;
+  --secondary-text: #6b7280;
+  --bg-color: #f8f9fa;
+  --grad-start: #5A189A;
+  --grad-end: #F59E0B;
+  --font-main: 'Inter', sans-serif;
 }
 
 * { 
@@ -14,33 +16,17 @@
   box-sizing: border-box; 
 }
 
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-white);
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  height: 100vh;
-  position: relative;
+html { 
+  scroll-behavior: smooth; 
+}
+
+body { 
+  font-family: var(--font-main); 
+  background-color: var(--bg-color); 
+  color: var(--primary-text); 
 }
 
 /* ==========================================================================
-   2. NAVBAR
-   ========================================================================== */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px 60px;
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  transform-origin: center top; 
-  transform: scale(1);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.navbar:hover {
-  transform: scale(1.05); 
    2. NAVIGATION BAR & HOVER MENU
    ========================================================================== */
 .navbar { 
@@ -54,7 +40,7 @@ body {
   padding: 15px 50px; 
   z-index: 1000;
   
-  /* Nền kính mờ (Glassmorphism) */
+  
   background: rgba(248, 249, 250, 0.85); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -62,23 +48,12 @@ body {
   transition: all 0.3s ease;
 }
 
-.nav-left {
+.logo-group { 
   display: flex;
   align-items: center;
-  gap: 15px;
+  cursor: pointer; 
 }
 
-.logo-img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.nav-brand {
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  line-height: 1.4;
 .logo-img { 
   height: 75px; 
   object-fit: contain; 
@@ -86,7 +61,7 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* Hover phóng to logo */
+
 .logo-img:hover {
   transform: scale(1.08);
 }
@@ -107,7 +82,7 @@ body {
   transition: color 0.3s ease;
 }
 
-/* Gạch chân ẩn */
+
 .nav-links li a::after {
   content: '';
   position: absolute;
@@ -120,7 +95,7 @@ body {
   transition: width 0.3s ease; 
 }
 
-/* Hover chữ đổi màu cam và gạch chân chạy ra */
+
 .nav-links li a:hover {
   color: var(--grad-end); 
 }
@@ -139,33 +114,18 @@ body {
   align-items: center; 
   justify-content: center; 
   min-height: 100vh; 
-  padding: 80px 20px 0 20px; /* Thêm padding-top để tránh kẹt dưới navbar */
+  padding: 80px 20px 0 20px;
   text-align: center; 
 }
 
-.brand-title { font-weight: 600; }
-
-.brand-subtitle {
-  color: var(--accent-blue);
-  font-size: 0.65rem;
-  letter-spacing: 1.5px;
+.text-container { 
+  width: 100%;
+  max-width: 1152px; 
 }
 
-.nav-right {
-  display: flex;
-  gap: 30px;
-}
-
-.nav-right a {
-  color: var(--text-white);
-  text-decoration: none;
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  font-weight: 500;
-  transition: color 0.3s ease;
 .hero-title { 
   margin-bottom: 1.2rem;
-  /* Dùng clamp để chữ tự động co giãn to nhỏ theo màn hình */
+  
   font-size: clamp(2.5rem, 6vw, 6rem); 
   font-weight: 900; 
   line-height: 1.1; 
@@ -183,16 +143,9 @@ body {
   letter-spacing: 0.025em; 
 }
 
-.nav-right a:hover { color: var(--accent-blue); }
-
 /* ==========================================================================
-   3. HERO SECTION (BỐ CỤC CHÍNH)
+   4. SCROLL INDICATOR
    ========================================================================== */
-.hero-section {
-  display: flex;
-  height: 100vh;
-  padding: 120px 60px 0 60px; /* Tránh đè Navbar */
-  align-items: center; 
 .scroll-indicator { 
   position: absolute; 
   bottom: 30px; 
@@ -209,26 +162,10 @@ body {
   transition: color 0.3s ease; 
 }
 
-/* --- Cột Chữ (Bên trái) --- */
-.text-content {
-  flex: 1;
-  max-width: 600px;
-  z-index: 10;
-  pointer-events: none; 
+.scroll-indicator:hover { 
+  color: var(--primary-text); 
 }
 
-.main-title {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-}
-
-/* SỬ DỤNG CSS GRID ĐỂ CĂN THẲNG TRỤC CHỮ A-R-I-S-E */
-.title-row {
-  display: grid;
-  grid-template-columns: 85px auto; /* Cố định 85px cho chữ cái đầu */
-  align-items: baseline; 
-  line-height: 1.1; 
 .scroll-text { 
   font-size: 0.9rem; 
   font-weight: 500; 
@@ -240,24 +177,12 @@ body {
   animation: scrollBounce 2s infinite ease-in-out; 
 }
 
-.first-letter {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 900;
-  font-size: clamp(3.5rem, 6.5vw, 7rem); /* Làm chữ to lên một chút */
-  text-align: center; /* Đảm bảo căn giữa trong cột 85px */
-  
-  /* Đổ màu gradient và glow phát sáng xanh lơ không viền */
-  background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 15px rgba(141, 164, 255, 0.6));
+@keyframes scrollBounce { 
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 
+  40% { transform: translateY(6px); } 
+  60% { transform: translateY(3px); } 
 }
 
-.rest-letter {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(3rem, 5.5vw, 5.5rem);
-  font-weight: 900;
-  letter-spacing: -0.02em;
 /* ==========================================================================
    5. ABOUT US (PAGE 2)
    ========================================================================== */
@@ -270,100 +195,12 @@ body {
   background-color: var(--bg-color); 
 }
 
-.description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--text-gray);
-  max-width: 90%;
-  letter-spacing: 0.5px;
-  margin-left: 10px; /* Thụt vào tí xíu cho cân đối */
-}
-
-/* --- Cột 3D Hạc Origami (Bên phải) --- */
-.robot-3d-wrapper {
-  position: absolute;
-  right: -5%; 
-  top: 0;
-  width: 65%; 
-  height: 100%; 
-  z-index: 5; 
-}
-
-#robot-canvas-container {
+.about-container { 
   width: 100%;
-  height: 100%;
-  cursor: grab; 
+  max-width: 1200px; 
+  margin: 0 auto; 
 }
 
-#robot-canvas-container:active {
-  cursor: grabbing; 
-}
-
-.drag-hint {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.7rem;
-  letter-spacing: 4px;
-  color: var(--text-gray);
-  pointer-events: none;
-}
-
-/* ==========================================================================
-   4. RESPONSIVE CHO ĐIỆN THOẠI & TABLET
-   ========================================================================== */
-@media (max-width: 900px) {
-  body { overflow: auto; }
-
-  .navbar {
-    padding: 20px;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .nav-right {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .hero-section {
-    flex-direction: column;
-    padding: 180px 20px 0 20px; 
-    justify-content: flex-start;
-  }
-
-  .text-content {
-    max-width: 100%;
-  }
-
-  .title-row {
-    grid-template-columns: 60px auto; 
-  }
-
-  .first-letter {
-    font-size: clamp(3rem, 9vw, 5rem);
-  }
-
-  .rest-letter {
-    font-size: clamp(2.5rem, 8vw, 4rem);
-  }
-
-  .description {
-    margin-left: 0;
-    text-align: center;
-  }
-
-  .robot-3d-wrapper {
-    position: relative;
-    right: 0;
-    width: 100%;
-    height: 50vh; 
-    margin-top: 40px;
-  }
-  
-  .drag-hint { bottom: 10px; }
-}
 .about-title { 
   margin-bottom: 1.5rem;
   color: #000; 
@@ -379,11 +216,11 @@ body {
 }
 
 /* ==========================================================================
-   6. RESPONSIVE CHO ĐIỆN THOẠI
+   6. RESPONSIVE FOR MOBILE
    ========================================================================== */
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column; /* Đẩy menu xuống dưới logo trên mobile */
+    flex-direction: column;
     padding: 15px 20px;
     gap: 15px;
   }
