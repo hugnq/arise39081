@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
-    <!-- Thư viện Three.js và OrbitControls điều khiển kéo xoay -->
+    <!-- Thư viện Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
@@ -37,19 +37,19 @@
         <div class="text-content">
             <h1 class="main-title">
                 AMS <br>
-                ROBOTICS
+                ROBO<span class="special-t">t</span>ICS
             </h1>
             <p class="description">Ams Robotics Innovation And Science Engineering</p>
         </div>
 
-        <!-- KHUNG CHỨA 3D ROBOT -->
+        <!-- KHUNG CHỨA 3D LÕI CÔNG NGHỆ -->
         <div class="robot-3d-wrapper">
             <div id="robot-canvas-container"></div>
-            <div class="drag-hint">DRAG THE ROBOT • SCROLL</div>
+            <div class="drag-hint">DRAG TO EXPLORE</div>
         </div>
     </main>
 
-    <!-- SCRIPT TẠO ROBOT 3D WIREFRAME -->
+    <!-- SCRIPT TẠO LÕI NĂNG LƯỢNG (SCIENCE CORE) -->
     <script>
         const container = document.getElementById('robot-canvas-container');
         const width = container.clientWidth;
@@ -57,7 +57,7 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        camera.position.set(20, 14, 25);
+        camera.position.set(0, 0, 30); // Đặt camera nhìn thẳng vào khối
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
@@ -69,54 +69,29 @@
         controls.dampingFactor = 0.05;
         controls.enableZoom = true;
 
-        const robotGroup = new THREE.Group();
-        scene.add(robotGroup);
+        const coreGroup = new THREE.Group();
+        scene.add(coreGroup);
 
-        // Chất liệu khung lưới và điểm hạt phát sáng
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.65 });
-        const pointMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.8 });
+        // Tạo hình khối đa diện (Icosahedron - Biểu tượng của sự sáng tạo khoa học)
+        // Số 2 ở cuối là độ chi tiết (chia nhỏ các mặt)
+        const geometry = new THREE.IcosahedronGeometry(9, 2);
 
-        function addWireframePart(geometry, x = 0, y = 0, z = 0, rotX = 0, rotZ = 0) {
-            const wireframe = new THREE.WireframeGeometry(geometry);
-            const line = new THREE.LineSegments(wireframe, lineMaterial);
-            const points = new THREE.Points(geometry, pointMaterial);
-            
-            const part = new THREE.Group();
-            part.add(line);
-            part.add(points);
-            
-            part.position.set(x, y, z);
-            part.rotation.x = rotX;
-            part.rotation.z = rotZ;
-            robotGroup.add(part);
-        }
+        // 1. Lớp lưới màu xanh tím
+        const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.35 });
+        const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), wireframeMaterial);
+        coreGroup.add(wireframe);
 
-        // 1. Khung gầm chính (Chassis)
-        addWireframePart(new THREE.BoxGeometry(14, 1.5, 12), 0, 0, 0);
+        // 2. Lớp hạt sáng (Các điểm giao nhau)
+        const pointsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.9 });
+        const points = new THREE.Points(geometry, pointsMaterial);
+        coreGroup.add(points);
 
-        // 2. Tháp nâng trung tâm (Lift Tower) - ĐÃ SỬA LỖI TẠI ĐÂY
-        addWireframePart(new THREE.BoxGeometry(8, 9, 8), 0, 5, 0); 
-        addWireframePart(new THREE.CylinderGeometry(2.5, 2.5, 6, 16), 0, 11, 0);
-
-        // 3. 4 Bánh xe Mecanum
-        const wheelGeo = new THREE.CylinderGeometry(2.2, 2.2, 1.8, 16);
-        addWireframePart(wheelGeo, -7.5, -0.2, 4.5, 0, Math.PI / 2);
-        addWireframePart(wheelGeo, 7.5, -0.2, 4.5, 0, Math.PI / 2);
-        addWireframePart(wheelGeo, -7.5, -0.2, -4.5, 0, Math.PI / 2);
-        addWireframePart(wheelGeo, 7.5, -0.2, -4.5, 0, Math.PI / 2);
-
-        // 4. Tay gắp phía trước (Intake)
-        addWireframePart(new THREE.BoxGeometry(6, 2, 4), 0, 1.5, 7.5);
-
-        // Lưới sàn (Grid floor)
-        const gridHelper = new THREE.GridHelper(30, 20, 0x5a189a, 0x1e1e38);
-        gridHelper.position.y = -2.5;
-        scene.add(gridHelper);
-
-        // Vòng lặp render
+        // Vòng lặp chuyển động
         function animate() {
             requestAnimationFrame(animate);
-            robotGroup.rotation.y += 0.002; // Tự động xoay nhẹ khi không chạm chuột
+            // Cho khối tự động xoay lơ lửng đa chiều
+            coreGroup.rotation.y += 0.002;
+            coreGroup.rotation.x += 0.001; 
             controls.update();
             renderer.render(scene, camera);
         }
