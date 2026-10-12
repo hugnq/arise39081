@@ -7,7 +7,8 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <!-- Nhúng cả 2 font: Inter cho chữ thường, Space Grotesk cho chữ cái đầu -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="main.css">
     
@@ -23,7 +24,8 @@
             <img src="logo-arise-round.png" alt="ARISE Logo" class="logo-img" onerror="this.style.display='none'">
             <div class="nav-brand">
                 <span class="brand-title">ARISE / 39081</span><br>
-                <span class="brand-subtitle">FTC TEAM • HANOI, VIETNAM</span>
+                <span class="brand-subtitle">FTC TEAM • HANOI, VIETNAM</span><br>
+                <span class ="brand-title">Hanoi-Amsterdam High School for Gifted</span>
             </div>
         </div>
         <div class="nav-right">
@@ -38,163 +40,165 @@
     <!-- HERO SECTION -->
     <main class="hero-section">
         <div class="text-content">
-            <h10 class="main-title">
-                Ams Robotics <br>
-                Innovation Science<br>
-                Engineering
-            </h10>
-            <p class="description">Hanoi-Amsterdam Hight School for Gifted</p>
+            <!-- Cấu trúc chia dòng để căn thẳng trục chữ A-R-I-S-E -->
+            <div class="main-title">
+                <div class="title-row">
+                    <span class="first-letter">A</span>
+                    <span class="rest-letter">ms</span>
+                </div>
+                <div class="title-row">
+                    <span class="first-letter">R</span>
+                    <span class="rest-letter">obotics</span>
+                </div>
+                <div class="title-row">
+                    <span class="first-letter">I</span>
+                    <span class="rest-letter">nnovation</span>
+                </div>
+                <div class="title-row">
+                    <span class="first-letter">S</span>
+                    <span class="rest-letter">cience</span>
+                </div>
+                <div class="title-row">
+                    <span class="first-letter">E</span>
+                    <span class="rest-letter">ngineering</span>
+                </div>
+            </div>
         </div>
 
-        <!-- KHUNG CHỨA 3D HẠC CÔNG NGHỆ -->
+        <!-- KHUNG CHỨA HẠC ORIGAMI 3D -->
         <div class="robot-3d-wrapper">
             <div id="robot-canvas-container"></div>
             <div class="drag-hint">DRAG TO EXPLORE</div>
         </div>
     </main>
 
-    <!-- SCRIPT TẠO HẠC ORIGAMI ĐẶC (SOLID LOW-POLY) -->
+    <!-- SCRIPT TẠO HẠC 3D (GIỮ NGUYÊN) -->
     <script>
-        const container = document.getElementById('robot-canvas-container');
-        const width = container.clientWidth;
-        const height = container.clientHeight;
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById('robot-canvas-container');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
 
-        const scene = new THREE.Scene();
-        // Camera nhìn chéo
-        const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        camera.position.set(10, 7, 14); 
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera.position.set(10, 7, 14); 
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.enableZoom = true;
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
 
-        // --- ĐÁNH SÁNG MÔI TRƯỜNG (RẤT QUAN TRỌNG ĐỂ THẤY KHỐI ĐẶC) ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
 
-        // Đèn hắt từ phía trên bên phải (Màu xanh tím lơ)
-        const dirLight = new THREE.DirectionalLight(0x8da4ff, 2.5);
-        dirLight.position.set(10, 15, 10);
-        scene.add(dirLight);
+            const dirLight = new THREE.DirectionalLight(0x8da4ff, 2.5);
+            dirLight.position.set(10, 15, 10);
+            scene.add(dirLight);
 
-        // Đèn hắt từ phía dưới bên trái (Màu cam gradient)
-        const backLight = new THREE.DirectionalLight(0xf59e0b, 1.5);
-        backLight.position.set(-10, -5, -10);
-        scene.add(backLight);
+            const backLight = new THREE.DirectionalLight(0xf59e0b, 1.5);
+            backLight.position.set(-10, -5, -10);
+            scene.add(backLight);
 
-        const birdGroup = new THREE.Group();
-        scene.add(birdGroup);
+            const birdGroup = new THREE.Group();
+            scene.add(birdGroup);
 
-        /* --- TỌA ĐỘ CÁC ĐIỂM HẠC ORIGAMI --- */
-        const vertices = new Float32Array([
-            5.0,  3.0,  0.0,   // 0: Mỏ
-            3.5,  4.5,  0.0,   // 1: Đỉnh đầu
-            3.0,  2.5,  0.0,   // 2: Cổ trên
-            1.0, -1.0,  0.0,   // 3: Ngực
-           -2.0, -1.0,  0.0,   // 4: Bụng sau
-           -5.0,  3.0,  0.0,   // 5: Chóp đuôi
-            0.0,  1.5,  0.0,   // 6: Lưng giữa
-            1.0,  1.0,  1.0,   // 7: Cổ trái
-           -1.5,  1.0,  1.0,   // 8: Gốc đuôi trái
-           -2.0,  5.0,  5.0,   // 9: Đỉnh cánh trái
-            0.0,  0.5,  2.0,   // 10: Khớp cánh trái dưới
-            1.0,  1.0, -1.0,   // 11: Cổ phải
-           -1.5,  1.0, -1.0,   // 12: Gốc đuôi phải
-           -2.0,  5.0, -5.0,   // 13: Đỉnh cánh phải
-            0.0,  0.5, -2.0    // 14: Khớp cánh phải dưới
-        ]);
+            const vertices = new Float32Array([
+                5.0,  3.0,  0.0,   
+                3.5,  4.5,  0.0,   
+                3.0,  2.5,  0.0,   
+                1.0, -1.0,  0.0,   
+               -2.0, -1.0,  0.0,   
+               -5.0,  3.0,  0.0,   
+                0.0,  1.5,  0.0,   
+                1.0,  1.0,  1.0,   
+               -1.5,  1.0,  1.0,   
+               -2.0,  5.0,  5.0,   
+                0.0,  0.5,  2.0,   
+                1.0,  1.0, -1.0,   
+               -1.5,  1.0, -1.0,   
+               -2.0,  5.0, -5.0,   
+                0.0,  0.5, -2.0    
+            ]);
 
-        const indices = [
-            0, 1, 2,  2, 1, 7,  2, 11, 1,  2, 7, 3,  2, 3, 11,
-            7, 1, 6,  11, 6, 1,
-            7, 3, 10,  11, 14, 3,  10, 3, 4,  14, 4, 3,  8, 10, 4,  12, 4, 14,
-            7, 6, 10,  11, 14, 6,  10, 6, 8,  14, 12, 6,
-            8, 6, 5,  12, 5, 6,  8, 5, 4,  12, 4, 5,
-            7, 10, 9,  10, 8, 9,  8, 6, 9,  7, 9, 6,
-            11, 13, 14,  14, 13, 12,  12, 13, 6,  11, 6, 13
-        ];
+            const indices = [
+                0, 1, 2,  2, 1, 7,  2, 11, 1,  2, 7, 3,  2, 3, 11,
+                7, 1, 6,  11, 6, 1,
+                7, 3, 10,  11, 14, 3,  10, 3, 4,  14, 4, 3,  8, 10, 4,  12, 4, 14,
+                7, 6, 10,  11, 14, 6,  10, 6, 8,  14, 12, 6,
+                8, 6, 5,  12, 5, 6,  8, 5, 4,  12, 4, 5,
+                7, 10, 9,  10, 8, 9,  8, 6, 9,  7, 9, 6,
+                11, 13, 14,  14, 13, 12,  12, 13, 6,  11, 6, 13
+            ];
 
-        const craneGeo = new THREE.BufferGeometry();
-        craneGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        craneGeo.setIndex(indices);
-        craneGeo.computeVertexNormals();
+            const craneGeo = new THREE.BufferGeometry();
+            craneGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            craneGeo.setIndex(indices);
+            craneGeo.computeVertexNormals();
 
-        /* --- 1. LỚP VỎ ĐẶC (SOLID MESH) --- */
-        // Vật liệu bóng, tối màu, phản chiếu ánh sáng cắt gọt (flatShading)
-        const solidMat = new THREE.MeshPhysicalMaterial({
-            color: 0x111827,       // Màu xanh đen huyền bí
-            metalness: 0.8,        // Độ kim loại
-            roughness: 0.2,        // Bề mặt bóng
-            side: THREE.DoubleSide, 
-            flatShading: true,     // Rất quan trọng: Tạo góc cạnh sắc nét của Origami
-            transparent: true,
-            opacity: 0.95
-        });
-        const craneSolid = new THREE.Mesh(craneGeo, solidMat);
-        birdGroup.add(craneSolid);
+            const solidMat = new THREE.MeshPhysicalMaterial({
+                color: 0x111827,
+                metalness: 0.8,        
+                roughness: 0.2,        
+                side: THREE.DoubleSide, 
+                flatShading: true,     
+                transparent: true,
+                opacity: 0.95
+            });
+            const craneSolid = new THREE.Mesh(craneGeo, solidMat);
+            birdGroup.add(craneSolid);
 
-        /* --- 2. VIỀN SÁNG SẮC NÉT --- */
-        // Tạo đường viền phát sáng ở các nếp gấp
-        const edges = new THREE.EdgesGeometry(craneGeo);
-        const wireMat = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.7 });
-        const craneWire = new THREE.LineSegments(edges, wireMat);
-        birdGroup.add(craneWire);
+            const edges = new THREE.EdgesGeometry(craneGeo);
+            const wireMat = new THREE.LineBasicMaterial({ color: 0x8da4ff, transparent: true, opacity: 0.7 });
+            const craneWire = new THREE.LineSegments(edges, wireMat);
+            birdGroup.add(craneWire);
 
-        /* --- 3. LÕI NĂNG LƯỢNG (TRÁI TIM) --- */
-        // Khối đa diện phát sáng tự thân
-        const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
-        const coreMat = new THREE.MeshStandardMaterial({ 
-            color: 0xffffff,
-            emissive: 0x5a189a, // Hắt màu tím/cam
-            emissiveIntensity: 1.5,
-            flatShading: true 
-        });
-        const heartCore = new THREE.Mesh(coreGeo, coreMat);
-        heartCore.position.set(0.5, 0.5, 0);
-        
-        // Đèn nội tại phát ra từ lõi để chiếu sáng lòng ngực
-        const coreLight = new THREE.PointLight(0x8da4ff, 2, 8);
-        heartCore.add(coreLight);
-        
-        birdGroup.add(heartCore);
+            const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
+            const coreMat = new THREE.MeshStandardMaterial({ 
+                color: 0xffffff,
+                emissive: 0x5a189a, 
+                emissiveIntensity: 1.5,
+                flatShading: true 
+            });
+            const heartCore = new THREE.Mesh(coreGeo, coreMat);
+            heartCore.position.set(0.5, 0.5, 0);
+            
+            const coreLight = new THREE.PointLight(0x8da4ff, 2, 8);
+            heartCore.add(coreLight);
+            
+            birdGroup.add(heartCore);
 
-        // Chỉnh góc cho hạc
-        birdGroup.rotation.z = Math.PI / 12;
+            birdGroup.rotation.z = Math.PI / 12;
 
-        const clock = new THREE.Clock();
+            const clock = new THREE.Clock();
 
-        // Vòng lặp chuyển động
-        function animate() {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
 
-            // Hạc xoay vòng và nhấp nhô nhẹ
-            birdGroup.rotation.y = time * 0.2;
-            birdGroup.position.y = Math.sin(time * 1.5) * 0.4;
+                birdGroup.rotation.y = time * 0.2;
+                birdGroup.position.y = Math.sin(time * 1.5) * 0.4;
 
-            // Trái tim đập (phóng to thu nhỏ nhẹ) và xoay nhanh hơn
-            heartCore.rotation.x -= 0.02;
-            heartCore.rotation.y += 0.03;
-            heartCore.scale.setScalar(1 + Math.sin(time * 4) * 0.15); // Hiệu ứng nhịp đập
+                heartCore.rotation.x -= 0.02;
+                heartCore.rotation.y += 0.03;
+                heartCore.scale.setScalar(1 + Math.sin(time * 4) * 0.15); 
 
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
 
-        // Căn chỉnh khi đổi kích thước màn hình
-        window.addEventListener('resize', () => {
-            const newWidth = container.clientWidth;
-            const newHeight = container.clientHeight;
-            camera.aspect = newWidth / newHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(newWidth, newHeight);
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth;
+                const newHeight = container.clientHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
         });
     </script>
 </body>
