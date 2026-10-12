@@ -4,7 +4,7 @@
 :root {
   --primary-text: #F8FAFC; 
   --secondary-text: #94A3B8; 
-  --bg-color: #0F172A; 
+  --bg-color: #0A0D15;
   --grad-start: #5A189A;
   --grad-end: #F59E0B;
   --font-main: 'Inter', sans-serif;
@@ -40,7 +40,7 @@ body {
   padding: 15px 50px; 
   z-index: 1000;
   
-  background: rgba(15, 23, 42, 0.85); 
+  background: rgba(10, 13, 21, 0.85); 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
@@ -66,10 +66,10 @@ body {
 }
 
 .team-number {
-  color: #94A3B8; 
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  color: var(--primary-text); 
+  font-size: 1.3rem; 
+  font-weight: 800; 
+  letter-spacing: 3px; 
 }
 
 .nav-links {
@@ -129,8 +129,8 @@ body {
 }
 
 .hero-title { 
-  margin-bottom: 1.2rem;
-  font-size: clamp(2.5rem, 6vw, 6rem); 
+  margin-bottom: 1rem;
+  font-size: clamp(1.8rem, 4vw, 4rem); 
   font-weight: 900; 
   line-height: 1.15; 
   letter-spacing: -0.025em; 
@@ -142,9 +142,8 @@ body {
 
 .title-line {
     display: flex;
-    align-items: center;
+    align-items: center; 
 }
-
 
 .arise-letter {
   background: linear-gradient(to right, var(--grad-start), var(--grad-end)); 
@@ -153,12 +152,12 @@ body {
   color: transparent; 
   font-size: 1.1em; 
   display: inline-block;
-  width: 1em;
-  text-align: center;
+  width: 1em; 
+  text-align: center; 
 }
 
 .subtitle { 
-  font-size: clamp(1rem, 2vw, 1.5rem); 
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem); 
   font-weight: 500; 
   color: var(--secondary-text); 
   letter-spacing: 0.025em; 
