@@ -66,8 +66,12 @@ body {
 
 .brand-subtitle {
   color: var(--accent-blue);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 1.5px;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 3px;
+  opacity: 0.9;
 }
 
 .nav-right {
@@ -126,6 +130,7 @@ body {
   
   /* Hiệu ứng màu gradient chìm và phát sáng xanh lơ */
   background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 15px rgba(141, 164, 255, 0.6));
