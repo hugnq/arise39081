@@ -79,16 +79,37 @@ body {
   gap: 30px;
 }
 
+/* Trạng thái bình thường của các nút Menu */
 .nav-right a {
   color: var(--text-white);
   text-decoration: none;
   font-size: 0.75rem;
   letter-spacing: 2px;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
-.nav-right a:hover { color: var(--accent-blue); }
+/* ==========================================================================
+   HIỆU ỨNG KHI DI CHUỘT (HOVER): CHỮ VÀ VIỀN BÓNG GRADIENT PHÁT SÁNG
+   ========================================================================== */
+.nav-right a:hover {
+  /* 1. Đổi màu bản thân chữ thành Gradient (Trắng pha Xanh lơ) */
+  background: linear-gradient(90deg, #ffffff 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* 2. Tạo viền hào quang Gradient đa tầng: 
+        Lớp trong: Xanh lơ (#8da4ff)
+        Lớp ngoài: Tím neon (#aa00ff) hoặc Cam (#ff8800) */
+  filter: drop-shadow(0 0 5px rgba(141, 164, 255, 0.8))
+          drop-shadow(0 0 12px rgba(170, 0, 255, 0.6));
+
+  /* 3. Nhích nhẹ lên trên một xíu tạo cảm giác tương tác nổi */
+  transform: translateY(-2px);
+}
 
 /* ==========================================================================
    3. HERO SECTION (BỐ CỤC CHÍNH)
