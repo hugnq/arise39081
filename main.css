@@ -1,13 +1,11 @@
 /* ==========================================================================
-   1. VARIABLES & RESET
+   1. BIẾN MÀU SẮC & THIẾT LẬP CƠ BẢN
    ========================================================================== */
 :root {
-  --primary-text: #F8FAFC; 
-  --secondary-text: #94A3B8; 
-  --bg-color: #0A0D15;
-  --grad-start: #5A189A;
-  --grad-end: #F59E0B;
-  --font-main: 'Inter', sans-serif;
+  --bg-dark: #0D1526;
+  --text-white: #ffffff;
+  --text-gray: #9ca3af;
+  --accent-blue: #8da4ff; /* Xanh lơ công nghệ */
 }
 
 * { 
@@ -16,247 +14,425 @@
   box-sizing: border-box; 
 }
 
-html { 
-  scroll-behavior: smooth; 
+html {
+  scroll-behavior: smooth;
 }
 
-body { 
-  font-family: var(--font-main); 
-  background-color: var(--bg-color); 
-  color: var(--primary-text); 
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto; /* Cho phép cuộn dọc xuống Trang 2 */
+  min-height: 100vh;
+  position: relative;
 }
 
 /* ==========================================================================
-   2. NAVIGATION BAR & HOVER MENU
+   BACKGROUND BẦU TRỜI SAO ĐỘNG (STARFIELD)
+   ========================================================================== */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   2. NAVBAR
    ========================================================================== */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 30px 60px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: fixed;
+  top: 0; left: 0; right: 0;
   z-index: 100;
-  transform-origin: center top;
+  transform-origin: center top; 
   transform: scale(1);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease;
+  backdrop-filter: blur(6px);
 }
 
 .navbar:hover {
-  transform: scale(1.05);
+  transform: scale(1.03); 
 }
-.logo-group { 
+
+.nav-left {
   display: flex;
   align-items: center;
-  gap: 15px; 
-  cursor: pointer; 
+  gap: 15px;
 }
 
-.logo-img { 
-  height: 75px; 
-  object-fit: contain; 
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12)); 
-  transition: transform 0.3s ease;
+.logo-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.logo-img:hover {
-  transform: scale(1.08);
+.nav-brand {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  line-height: 1.4;
 }
 
-.team-number {
-  color: var(--primary-text); 
-  font-size: 1.3rem; 
-  font-weight: 800; 
-  letter-spacing: 3px; 
-}
+.brand-title { font-weight: 600; }
 
-.nav-links {
-  display: flex;
-  gap: 40px; 
-  list-style: none;
-}
-
-.nav-links li a {
-  text-decoration: none;
-  color: var(--primary-text);
+.brand-subtitle {
+  color: var(--accent-blue);
+  font-size: 0.62rem;
+  letter-spacing: 1.5px;
   font-weight: 600;
-  font-size: 1.1rem;
-  position: relative;
-  padding: 5px 0;
-  transition: color 0.3s ease;
-}
-
-.nav-links li a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: linear-gradient(to right, var(--grad-start), var(--grad-end)); 
-  border-radius: 2px;
-  transition: width 0.3s ease; 
-}
-
-.nav-links li a:hover {
-  color: var(--grad-end); 
-}
-
-.nav-links li a:hover::after {
-  width: 100%; 
-}
-
-/* ==========================================================================
-   3. HERO SECTION (PAGE 1)
-   ========================================================================== */
-.main-content { 
-  position: relative;
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  min-height: 100vh; 
-  padding: 80px 20px 0 50px; 
-}
-
-.text-container { 
-  width: 100%;
-  max-width: 1152px; 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-}
-
-.hero-title { 
-  margin-bottom: 1rem;
-  font-size: clamp(1.8rem, 4vw, 4rem); 
-  font-weight: 900; 
-  line-height: 1.15; 
-  letter-spacing: -0.025em; 
-  text-align: left; 
-  color: var(--primary-text); 
-  display: flex;
-  flex-direction: column;
-}
-
-.title-line {
-    display: flex;
-    align-items: center; 
-}
-
-.arise-letter {
-  background: linear-gradient(to right, var(--grad-start), var(--grad-end)); 
-  -webkit-background-clip: text; 
-  background-clip: text; 
-  color: transparent; 
-  font-size: 1.1em; 
   display: inline-block;
-  width: 1em; 
-  text-align: center; 
+  margin-top: 3px;
+  opacity: 0.9;
 }
 
-.subtitle { 
-  font-size: clamp(0.9rem, 1.2vw, 1.1rem); 
-  font-weight: 500; 
-  color: var(--secondary-text); 
-  letter-spacing: 0.025em; 
-  text-align: left; 
+.nav-right {
+  display: flex;
+  gap: 30px;
 }
 
-/* ==========================================================================
-   4. SCROLL INDICATOR
-   ========================================================================== */
-.scroll-indicator { 
-  position: absolute; 
-  bottom: 30px; 
-  left: 50%; 
-  z-index: 50;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 8px; 
-  color: var(--secondary-text); 
-  text-decoration: none; 
-  user-select: none; 
-  transform: translateX(-50%); 
-  transition: color 0.3s ease; 
+.nav-right a {
+  color: var(--text-white);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
-.scroll-indicator:hover { 
-  color: var(--primary-text); 
-}
-
-.scroll-text { 
-  font-size: 0.9rem; 
-  font-weight: 500; 
-  letter-spacing: 0.02em; 
-  white-space: nowrap; 
-}
-
-.scroll-arrow { 
-  animation: scrollBounce 2s infinite ease-in-out; 
-}
-
-@keyframes scrollBounce { 
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 
-  40% { transform: translateY(6px); } 
-  60% { transform: translateY(3px); } 
+.nav-right a:hover {
+  background: linear-gradient(90deg, #ffffff 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(141, 164, 255, 0.8))
+          drop-shadow(0 0 12px rgba(170, 0, 255, 0.6));
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   5. ABOUT US (PAGE 2)
+   3. TRANG 1: HERO SECTION (BỐ CỤC CHÍNH)
    ========================================================================== */
-.page-two { 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-  min-height: 100vh; 
-  padding: 100px 50px; 
-  background-color: var(--bg-color); 
+.hero-section {
+  display: flex;
+  height: 100vh;
+  padding: 120px 60px 0 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
-.about-container { 
+/* --- Cột Chữ (Bên trái) --- */
+.text-content {
+  flex: 1;
+  max-width: 600px;
+  z-index: 10;
+  pointer-events: none; 
+}
+
+.main-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.title-row {
+  display: grid;
+  grid-template-columns: 85px auto;
+  align-items: baseline; 
+  line-height: 1.1;
+}
+
+.first-letter {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 6.5vw, 7rem);
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 15px rgba(141, 164, 255, 0.6));
+}
+
+.rest-letter {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(3rem, 5.5vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+/* Định dạng Slogan */
+.slogan-badge {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 12px;
+  margin-top: 10px;
+}
+
+.slogan-line {
+  width: 45px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+  box-shadow: 0 0 8px var(--accent-blue);
+}
+
+.slogan-text {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-gray);
+  letter-spacing: 1px;
+}
+
+/* --- Cột 3D Hạc Origami (Bên phải) --- */
+.robot-3d-wrapper {
+  position: absolute;
+  right: -5%; 
+  top: 0;
+  width: 65%; 
+  height: 100%; 
+  z-index: 5; 
+}
+
+#robot-canvas-container {
   width: 100%;
-  max-width: 1200px; 
-  margin: 0 auto; 
+  height: 100%;
+  cursor: grab; 
 }
 
-.about-title { 
-  margin-bottom: 1.5rem;
-  color: var(--primary-text); 
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900; 
+#robot-canvas-container:active {
+  cursor: grabbing; 
 }
 
-.about-content { 
-  max-width: 800px;
-  color: var(--secondary-text); 
-  font-size: 1.1rem; 
-  line-height: 1.6; 
+/* --- Nút SCROLL FOR MORE ở cuối Trang 1 --- */
+.scroll-more-btn {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-gray);
+  transition: color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-more-btn:hover {
+  color: var(--text-white);
+  transform: translateX(-50%) translateY(-3px);
+}
+
+.scroll-text {
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(141, 164, 255, 0.5);
+}
+
+.scroll-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 22px;
+}
+
+.chevron {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--accent-blue);
+  border-bottom: 2px solid var(--accent-blue);
+  transform: rotate(45deg);
+  margin-top: -4px;
+  animation: pulseChevron 1.8s infinite ease-in-out;
+}
+
+.chevron:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+@keyframes pulseChevron {
+  0%, 100% {
+    opacity: 0.2;
+    transform: rotate(45deg) translate(-3px, -3px);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(45deg) translate(2px, 2px);
+    filter: drop-shadow(0 0 5px var(--accent-blue));
+  }
 }
 
 /* ==========================================================================
-   6. RESPONSIVE FOR MOBILE
+   4. TRANG 2: ABOUT US SECTION (ĐƯA LÊN ĐẦU TRANG & HIỆU ỨNG MỜ -> RÕ DẦN)
    ========================================================================== */
-@media (max-width: 768px) {
+.about-section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Đẩy nội dung lên phía trên đầu trang 2 */
+  position: relative;
+  z-index: 1;
+  padding: 130px 40px 80px 40px; /* Cách phía trên 130px để nằm ngay dưới Navbar */
+  overflow: hidden;
+}
+
+.about-container {
+  text-align: center;
+  max-width: 850px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900;
+  letter-spacing: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* Trạng thái ban đầu: Mờ (opacity: 0 + blur) */
+.fade-in-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(14px);
+  transform: translateY(10px);
+  transition: opacity 1.2s ease,
+              filter 1.2s ease,
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-white);
+}
+
+.fade-in-word.highlight {
+  background: linear-gradient(180deg, #ffffff 15%, var(--accent-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition-delay: 0.15s; /* Chữ US rõ dần ngay sau chữ ABOUT một nhịp nhẹ */
+}
+
+.about-divider {
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  box-shadow: 0 0 15px var(--accent-blue);
+  margin-bottom: 28px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+}
+
+.about-subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.8;
+  color: var(--text-gray);
+  max-width: 680px;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(20px);
+  transition: opacity 1s ease 0.45s,
+              filter 1s ease 0.45s,
+              transform 1s ease 0.45s;
+}
+
+.about-subtitle strong {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+/* Khi cuộn tới Trang 2 (.in-view được kích hoạt bởi main.js) -> Từ mờ thành rõ dần */
+.about-section.in-view .fade-in-word {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.about-section.in-view .fade-in-word.highlight {
+  opacity: 1;
+  filter: blur(0) drop-shadow(0 0 20px rgba(141, 164, 255, 0.7));
+  transform: translateY(0);
+}
+
+.about-section.in-view .about-divider {
+  width: 220px;
+}
+
+.about-section.in-view .about-subtitle {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   5. RESPONSIVE CHO ĐIỆN THOẠI & TABLET
+   ========================================================================== */
+@media (max-width: 900px) {
   .navbar {
-    flex-direction: column;
     padding: 15px 20px;
-    gap: 15px;
-  }
-  .nav-links {
-    gap: 20px;
-  }
-  .nav-links li a {
-    font-size: 1rem;
+    flex-direction: column;
+    gap: 12px;
   }
   
-  .main-content {
-      padding: 80px 20px 0 20px; 
+  .nav-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
   }
-  
-  .page-two {
-    padding: 60px 20px;
+
+  .hero-section {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    padding: 150px 20px 80px 20px; 
+    justify-content: flex-start;
+  }
+
+  .text-content {
+    max-width: 100%;
+  }
+
+  .title-row {
+    grid-template-columns: 60px auto;
+  }
+
+  .first-letter {
+    font-size: clamp(3rem, 9vw, 5rem);
+  }
+
+  .rest-letter {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  .robot-3d-wrapper {
+    position: relative;
+    right: 0;
+    width: 100%;
+    height: 45vh; 
+    margin-top: 20px;
+  }
+
+  .about-section {
+    padding: 120px 20px 60px 20px;
   }
 }
