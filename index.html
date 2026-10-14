@@ -23,12 +23,12 @@
             <img src="logo-arise-round-black.png" alt="ARISE Logo" class="logo-img" onerror="this.style.display='none'">
             <div class="nav-brand">
                 <span class="brand-title">ARISE / 39081</span><br>
-                <span class="brand-subtitle">HANOI - AMSTERDAM HIGH SCHOOL FOR GIFTED</span>
+                <span class="brand-subtitle" id="brand-subtitle">HANOI - AMSTERDAM HIGH SCHOOL FOR GIFTED</span>
             </div>
         </div>
         <div class="nav-right">
-            <a href="#home-section">HOME</a>
-            <a href="#about-section">STORY</a>
+            <a href="#home-section" id="nav-home">HOME</a>
+            <a href="#about-section" id="nav-story">STORY</a>
             
             <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Mode" title="Chuyển chế độ Sáng/Tối">
                 <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -46,6 +46,20 @@
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
+
+            <!-- Tiện ích tùy chỉnh ngôn ngữ ở ngoài cùng bên phải -->
+            <div class="lang-dropdown" id="lang-dropdown">
+                <button id="lang-toggle" class="lang-toggle-btn" aria-haspopup="true" aria-expanded="false">
+                    <span id="lang-label">Language</span>
+                    <svg class="lang-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="lang-menu" id="lang-menu">
+                    <button class="lang-option" data-lang="en">English</button>
+                    <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -85,7 +99,7 @@
         </div>
 
         <a href="#about-section" class="scroll-more-btn" id="scroll-more-btn">
-            <span class="scroll-text">SCROLL FOR MORE</span>
+            <span class="scroll-text" id="scroll-text">SCROLL FOR MORE</span>
             <div class="scroll-icon">
                 <span class="chevron"></span>
                 <span class="chevron"></span>
@@ -95,13 +109,13 @@
 
     <section class="about-section" id="about-section">
         <div class="about-container">
-            <h2 class="about-title">
-                <span class="fade-in-word">ABOUT</span>
-                <span class="fade-in-word highlight">US</span>
+            <h2 class="about-title" id="about-title">
+                <span class="fade-in-word" id="about-word-1">ABOUT</span>
+                <span class="fade-in-word highlight" id="about-word-2">US</span>
             </h2>
             <div class="about-divider"></div>
-            <p class="about-subtitle">
-                Đội tuyển Robotics <strong>ARISE 39081</strong> trực thuộc Trường THPT Chuyên Hà Nội - Amsterdam, nơi đẳng cấp quốc tế, vươn tầm thế giới, đỉnh cao cuộc đời, hội tụ của những tinh hoa quốc tế.
+            <p class="about-subtitle" id="about-subtitle">
+                Robotics Team <strong>ARISE 39081</strong>, affiliated with HANOI - AMSTERDAM HIGH SCHOOL FOR GIFTED — a place of world-class excellence, global reach, the pinnacle of life, and the convergence of international elites.
             </p>
         </div>
     </section>

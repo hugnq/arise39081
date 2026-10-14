@@ -544,6 +544,101 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Xử lý tiện ích tùy chỉnh ngôn ngữ (Language Dropdown)
+    const langDropdown = document.getElementById("lang-dropdown");
+    const langToggleBtn = document.getElementById("lang-toggle");
+    const langLabelEl = document.getElementById("lang-label");
+    const langOptions = document.querySelectorAll(".lang-option");
+
+    const brandSubtitleEl = document.getElementById("brand-subtitle");
+    const navHomeEl = document.getElementById("nav-home");
+    const navStoryEl = document.getElementById("nav-story");
+    const scrollTextEl = document.getElementById("scroll-text");
+    const aboutWord1El = document.getElementById("about-word-1");
+    const aboutWord2El = document.getElementById("about-word-2");
+    const aboutSubtitleEl = document.getElementById("about-subtitle");
+
+    const translations = {
+        en: {
+            langName: "English",
+            brandSubtitle: "HANOI - AMSTERDAM HIGH SCHOOL FOR GIFTED",
+            navHome: "HOME",
+            navStory: "STORY",
+            scrollText: "SCROLL FOR MORE",
+            aboutWord1: "ABOUT",
+            aboutWord2: "US",
+            aboutSubtitle:
+                "Robotics Team <strong>ARISE 39081</strong>, affiliated with HANOI - AMSTERDAM HIGH SCHOOL FOR GIFTED — a place of world-class excellence, global reach, the pinnacle of life, and the convergence of international elites."
+        },
+        vi: {
+            langName: "Tiếng Việt",
+            brandSubtitle: "THPT Chuyên Hà Nội - Amsterdam",
+            navHome: "Trang chủ",
+            navStory: "Câu chuyện",
+            scrollText: "Cuộn xuống để khám phá",
+            aboutWord1: "Về",
+            aboutWord2: "chúng tôi",
+            aboutSubtitle:
+                "Đội tuyển Robotics <strong>ARISE 39081</strong> trực thuộc Trường THPT Chuyên Hà Nội - Amsterdam, nơi đẳng cấp quốc tế, vươn tầm thế giới, đỉnh cao cuộc đời, hội tụ của những tinh hoa quốc tế."
+        }
+    };
+
+    if (langToggleBtn && langDropdown) {
+        langToggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isOpen = langDropdown.classList.toggle("open");
+            langToggleBtn.setAttribute("aria-expanded", isOpen);
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!langDropdown.contains(e.target)) {
+                langDropdown.classList.remove("open");
+                langToggleBtn.setAttribute("aria-expanded", "false");
+            }
+        });
+    }
+
+    langOptions.forEach((opt) => {
+        opt.addEventListener("click", () => {
+            const selectedLang = opt.getAttribute("data-lang");
+            const data = translations[selectedLang];
+            if (!data) return;
+
+            langOptions.forEach((btn) => btn.classList.remove("active"));
+            opt.classList.add("active");
+
+            const targetElements = [
+                langLabelEl,
+                brandSubtitleEl,
+                navHomeEl,
+                navStoryEl,
+                scrollTextEl,
+                aboutWord1El,
+                aboutWord2El,
+                aboutSubtitleEl
+            ];
+
+            targetElements.forEach((el) => el && el.classList.add("lang-switching"));
+
+            setTimeout(() => {
+                // Đổi chữ "Language" trên nút thành ngôn ngữ vừa chọn ("English" hoặc "Tiếng Việt")
+                if (langLabelEl) langLabelEl.textContent = data.langName;
+                if (brandSubtitleEl) brandSubtitleEl.textContent = data.brandSubtitle;
+                if (navHomeEl) navHomeEl.textContent = data.navHome;
+                if (navStoryEl) navStoryEl.textContent = data.navStory;
+                if (scrollTextEl) scrollTextEl.textContent = data.scrollText;
+                if (aboutWord1El) aboutWord1El.textContent = data.aboutWord1;
+                if (aboutWord2El) aboutWord2El.textContent = data.aboutWord2;
+                if (aboutSubtitleEl) aboutSubtitleEl.innerHTML = data.aboutSubtitle;
+
+                targetElements.forEach((el) => el && el.classList.remove("lang-switching"));
+            }, 220);
+
+            langDropdown.classList.remove("open");
+            langToggleBtn.setAttribute("aria-expanded", "false");
+        });
+    });
+
     const storyEl = document.getElementById("about-section");
     if (storyEl) {
         const io = new IntersectionObserver(
