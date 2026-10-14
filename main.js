@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             ctx2d.save();
             ctx2d.beginPath();
-            ctx2d.arc(p.x, sY = p.y, p.r, 0, Math.PI * 2);
+            ctx2d.arc(p.x, p.y, p.r, 0, Math.PI * 2);
             ctx2d.fillStyle = activeHex;
             ctx2d.globalAlpha = p.opacity;
             ctx2d.shadowBlur = p.r * 5;
@@ -169,111 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const darkWireCrane = new THREE.LineSegments(edgeGeo, edgeMaterial);
     craneRoot.add(darkWireCrane);
 
-    const cadLines = [];
-    const cloudCoords = [];
-    const cloudColors = [];
-
-    const getV = (idx) => new THREE.Vector3(
-        rawCoords[idx * 3],
-        rawCoords[idx * 3 + 1],
-        rawCoords[idx * 3 + 2]
-    );
-
-    const pushSegment = (p1, p2) => {
-        cadLines.push(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-    };
-
-    const SUBDIVISIONS = 9;
-    const LAYER_OFFSETS = [0, -0.14, 0.14];
-
-    for (let i = 0; i < triIndices.length; i += 3) {
-        const vA = getV(triIndices[i]);
-        const vB = getV(triIndices[i + 1]);
-        const vC = getV(triIndices[i + 2]);
-
-        const normal = new THREE.Vector3()
-            .subVectors(vB, vA)
-            .cross(new THREE.Vector3().subVectors(vC, vA))
-            .normalize();
-
-        for (const offset of LAYER_OFFSETS) {
-            const shift = normal.clone().multiplyScalar(offset);
-            const A = vA.clone().add(shift);
-            const B = vB.clone().add(shift);
-            const C = vC.clone().add(shift);
-
-            for (let k = 1; k < SUBDIVISIONS; k++) {
-                const t = k / SUBDIVISIONS;
-                pushSegment(new THREE.Vector3().lerpVectors(A, B, t), new THREE.Vector3().lerpVectors(A, C, t));
-                pushSegment(new THREE.Vector3().lerpVectors(B, A, t), new THREE.Vector3().lerpVectors(B, C, t));
-                pushSegment(new THREE.Vector3().lerpVectors(C, A, t), new THREE.Vector3().lerpVectors(C, B, t));
-            }
-            pushSegment(A, B);
-            pushSegment(B, C);
-            pushSegment(C, A);
-        }
-
-        for (let k = 0; k <= 6; k++) {
-            const t = k / 6;
-            const pAB = new THREE.Vector3().lerpVectors(vA, vB, t);
-            const pBC = new THREE.Vector3().lerpVectors(vB, vC, t);
-            const pCA = new THREE.Vector3().lerpVectors(vC, vA, t);
-            const nShift = normal.clone().multiplyScalar(0.14);
-            pushSegment(pAB.clone().sub(nShift), pAB.clone().add(nShift));
-            pushSegment(pBC.clone().sub(nShift), pBC.clone().add(nShift));
-            pushSegment(pCA.clone().sub(nShift), pCA.clone().add(nShift));
-        }
-
-        const area = new THREE.Vector3().subVectors(vB, vA).cross(new THREE.Vector3().subVectors(vC, vA)).length() * 0.5;
-        const dotCount = Math.floor(area * 38) + 60;
-
-        for (let d = 0; d < dotCount; d++) {
-            let r1 = Math.random();
-            let r2 = Math.random();
-            if (r1 + r2 > 1) {
-                r1 = 1 - r1;
-                r2 = 1 - r2;
-            }
-            const r3 = 1 - r1 - r2;
-            const spread = (Math.random() - 0.5) * 0.28;
-
-            const px = vA.x * r1 + vB.x * r2 + vC.x * r3 + normal.x * spread + (Math.random() - 0.5) * 0.08;
-            const py = vA.y * r1 + vB.y * r2 + vC.y * r3 + normal.y * spread + (Math.random() - 0.5) * 0.08;
-            const pz = vA.z * r1 + vB.z * r2 + vC.z * r3 + normal.z * spread + (Math.random() - 0.5) * 0.08;
-
-            cloudCoords.push(px, py, pz);
-
-            if (Math.random() > 0.42) {
-                cloudColors.push(0.14, 0.38, 0.92);
-            } else {
-                cloudColors.push(0.28, 0.33, 0.42);
-            }
-        }
-    }
-
-    const cadWireGeo = new THREE.BufferGeometry();
-    cadWireGeo.setAttribute("position", new THREE.Float32BufferAttribute(cadLines, 3));
-    const cadWireMat = new THREE.LineBasicMaterial({
-        color: 0x475569,
-        transparent: true,
-        opacity: 0
-    });
-    const cadWireMesh = new THREE.LineSegments(cadWireGeo, cadWireMat);
-    craneRoot.add(cadWireMesh);
-
-    const pointCloudGeo = new THREE.BufferGeometry();
-    pointCloudGeo.setAttribute("position", new THREE.Float32BufferAttribute(cloudCoords, 3));
-    pointCloudGeo.setAttribute("color", new THREE.Float32BufferAttribute(cloudColors, 3));
-
-    const pointCloudMat = new THREE.PointsMaterial({
-        size: 0.085,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0
-    });
-    const cranePointCloud = new THREE.Points(pointCloudGeo, pointCloudMat);
-    craneRoot.add(cranePointCloud);
-
     const coreMesh = new THREE.Mesh(
         new THREE.IcosahedronGeometry(0.8, 0),
         new THREE.MeshStandardMaterial({
@@ -290,54 +185,331 @@ document.addEventListener("DOMContentLoaded", () => {
     coreMesh.add(new THREE.PointLight(0x8da4ff, 2, 8));
     craneRoot.add(coreMesh);
 
+    const createDotStarTexture = () => {
+        const c = document.createElement("canvas");
+        c.width = 64;
+        c.height = 64;
+        const ctx = c.getContext("2d");
+        const grad = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
+        grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+        grad.addColorStop(0.35, "rgba(255, 255, 255, 0.85)");
+        grad.addColorStop(0.7, "rgba(255, 255, 255, 0.2)");
+        grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(32, 32, 30, 0, Math.PI * 2);
+        ctx.fill();
+        return new THREE.CanvasTexture(c);
+    };
+
+    const createSparkleStarTexture = () => {
+        const c = document.createElement("canvas");
+        c.width = 64;
+        c.height = 64;
+        const ctx = c.getContext("2d");
+
+        const grad = ctx.createRadialGradient(32, 32, 1, 32, 32, 28);
+        grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+        grad.addColorStop(0.3, "rgba(255, 255, 255, 0.5)");
+        grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 64, 64);
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+        ctx.beginPath();
+        ctx.moveTo(32, 2);
+        ctx.quadraticCurveTo(34, 30, 62, 32);
+        ctx.quadraticCurveTo(34, 34, 32, 62);
+        ctx.quadraticCurveTo(30, 34, 2, 32);
+        ctx.quadraticCurveTo(30, 30, 32, 2);
+        ctx.closePath();
+        ctx.fill();
+
+        return new THREE.CanvasTexture(c);
+    };
+
+    const finalCloudCoords = [];
+    const cloudColors = [];
+    const finalSparkleCoords = [];
+    const sparkleColors = [];
+
+    const starPalette = [
+        [0.05, 0.08, 0.18],
+        [0.12, 0.23, 0.54],
+        [0.23, 0.36, 0.86],
+        [0.31, 0.27, 0.90],
+        [0.02, 0.52, 0.78]
+    ];
+
+    const pickStarColor = (targetArray, isEdge = false) => {
+        const rand = Math.random();
+        let c;
+        if (isEdge) {
+            c = rand < 0.45 ? starPalette[0] : (rand < 0.8 ? starPalette[2] : starPalette[1]);
+        } else {
+            c = starPalette[Math.floor(rand * starPalette.length)];
+        }
+        targetArray.push(c[0], c[1], c[2]);
+    };
+
+    const getV = (idx) => new THREE.Vector3(
+        rawCoords[idx * 3],
+        rawCoords[idx * 3 + 1],
+        rawCoords[idx * 3 + 2]
+    );
+
+    const edgePosAttr = edgeGeo.attributes.position.array;
+    for (let i = 0; i < edgePosAttr.length; i += 6) {
+        const pA = new THREE.Vector3(edgePosAttr[i], edgePosAttr[i + 1], edgePosAttr[i + 2]);
+        const pB = new THREE.Vector3(edgePosAttr[i + 3], edgePosAttr[i + 4], edgePosAttr[i + 5]);
+        const segLen = pA.distanceTo(pB);
+
+        const steps = Math.floor(segLen * 22);
+        for (let s = 0; s <= steps; s++) {
+            const t = (s + (Math.random() - 0.5) * 0.4) / steps;
+            const pt = new THREE.Vector3().lerpVectors(pA, pB, Math.max(0, Math.min(1, t)));
+
+            for (let layer = 0; layer < 2; layer++) {
+                const jitter = 0.045;
+                const px = pt.x + (Math.random() - 0.5) * jitter;
+                const py = pt.y + (Math.random() - 0.5) * jitter;
+                const pz = pt.z + (Math.random() - 0.5) * jitter;
+                finalCloudCoords.push(px, py, pz);
+                pickStarColor(cloudColors, true);
+            }
+
+            if (Math.random() < 0.08) {
+                finalSparkleCoords.push(
+                    pt.x + (Math.random() - 0.5) * 0.08,
+                    pt.y + (Math.random() - 0.5) * 0.08,
+                    pt.z + (Math.random() - 0.5) * 0.08
+                );
+                pickStarColor(sparkleColors, true);
+            }
+        }
+    }
+
+    const SHELL_OFFSETS = [-0.09, 0, 0.09];
+    for (let i = 0; i < triIndices.length; i += 3) {
+        const vA = getV(triIndices[i]);
+        const vB = getV(triIndices[i + 1]);
+        const vC = getV(triIndices[i + 2]);
+
+        const crossVec = new THREE.Vector3().subVectors(vB, vA).cross(new THREE.Vector3().subVectors(vC, vA));
+        const area = crossVec.length() * 0.5;
+        const normal = crossVec.clone().normalize();
+
+        const surfaceDots = Math.floor(area * 52) + 45;
+        for (let d = 0; d < surfaceDots; d++) {
+            let r1 = Math.random();
+            let r2 = Math.random();
+            if (r1 + r2 > 1) {
+                r1 = 1 - r1;
+                r2 = 1 - r2;
+            }
+            const r3 = 1 - r1 - r2;
+
+            const shell = SHELL_OFFSETS[d % SHELL_OFFSETS.length];
+            const spread = shell + (Math.random() - 0.5) * 0.04;
+
+            const px = vA.x * r1 + vB.x * r2 + vC.x * r3 + normal.x * spread;
+            const py = vA.y * r1 + vB.y * r2 + vC.y * r3 + normal.y * spread;
+            const pz = vA.z * r1 + vB.z * r2 + vC.z * r3 + normal.z * spread;
+
+            finalCloudCoords.push(px, py, pz);
+            pickStarColor(cloudColors, false);
+
+            if (Math.random() < 0.035) {
+                finalSparkleCoords.push(px, py, pz);
+                pickStarColor(sparkleColors, false);
+            }
+        }
+
+        const auraDots = Math.floor(area * 12) + 10;
+        for (let a = 0; a < auraDots; a++) {
+            let r1 = Math.random();
+            let r2 = Math.random();
+            if (r1 + r2 > 1) {
+                r1 = 1 - r1;
+                r2 = 1 - r2;
+            }
+            const r3 = 1 - r1 - r2;
+            const haloDist = (Math.random() - 0.5) * 0.55;
+
+            const px = vA.x * r1 + vB.x * r2 + vC.x * r3 + normal.x * haloDist + (Math.random() - 0.5) * 0.2;
+            const py = vA.y * r1 + vB.y * r2 + vC.y * r3 + normal.y * haloDist + (Math.random() - 0.5) * 0.2;
+            const pz = vA.z * r1 + vB.z * r2 + vC.z * r3 + normal.z * haloDist + (Math.random() - 0.5) * 0.2;
+
+            finalCloudCoords.push(px, py, pz);
+            pickStarColor(cloudColors, false);
+        }
+    }
+
+    const createScatteredBuffers = (finalArr) => {
+        const initArr = new Float32Array(finalArr.length);
+        const liveArr = new Float32Array(finalArr.length);
+        for (let i = 0; i < finalArr.length; i += 3) {
+            const fx = finalArr[i];
+            const fy = finalArr[i + 1];
+            const fz = finalArr[i + 2];
+
+            const radius = 10 + Math.random() * 18;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+
+            initArr[i] = fx * 1.8 + radius * Math.sin(phi) * Math.cos(theta);
+            initArr[i + 1] = fy * 1.8 + radius * Math.sin(phi) * Math.sin(theta);
+            initArr[i + 2] = fz * 1.8 + radius * Math.cos(phi);
+
+            liveArr[i] = initArr[i];
+            liveArr[i + 1] = initArr[i + 1];
+            liveArr[i + 2] = initArr[i + 2];
+        }
+        return { initArr, liveArr };
+    };
+
+    const mainStarBuffers = createScatteredBuffers(finalCloudCoords);
+    const sparkleStarBuffers = createScatteredBuffers(finalSparkleCoords);
+
+    const pointCloudGeo = new THREE.BufferGeometry();
+    pointCloudGeo.setAttribute("position", new THREE.BufferAttribute(mainStarBuffers.liveArr, 3));
+    pointCloudGeo.setAttribute("color", new THREE.Float32BufferAttribute(cloudColors, 3));
+
+    const pointCloudMat = new THREE.PointsMaterial({
+        size: 0.11,
+        map: createDotStarTexture(),
+        vertexColors: true,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        alphaTest: 0.01
+    });
+    const cranePointCloud = new THREE.Points(pointCloudGeo, pointCloudMat);
+    craneRoot.add(cranePointCloud);
+
+    const sparkleGeo = new THREE.BufferGeometry();
+    sparkleGeo.setAttribute("position", new THREE.BufferAttribute(sparkleStarBuffers.liveArr, 3));
+    sparkleGeo.setAttribute("color", new THREE.Float32BufferAttribute(sparkleColors, 3));
+
+    const sparkleMat = new THREE.PointsMaterial({
+        size: 0.28,
+        map: createSparkleStarTexture(),
+        vertexColors: true,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        alphaTest: 0.01
+    });
+    const sparklePointCloud = new THREE.Points(sparkleGeo, sparkleMat);
+    craneRoot.add(sparklePointCloud);
+
     const timer = new THREE.Clock();
     const INTRO_TIME = 2.6;
+    let lightModeStartTime = 0;
+
+    const updateStarFormation = (progress, elapsed) => {
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const swirlAngle = (1 - ease) * Math.PI * 1.2;
+        const cosA = Math.cos(swirlAngle);
+        const sinA = Math.sin(swirlAngle);
+
+        const mainAttr = pointCloudGeo.attributes.position;
+        const mArr = mainAttr.array;
+        const mInit = mainStarBuffers.initArr;
+        for (let i = 0; i < finalCloudCoords.length; i += 3) {
+            const ix = mInit[i];
+            const iy = mInit[i + 1];
+            const iz = mInit[i + 2];
+
+            const rx = ix * cosA - iz * sinA;
+            const rz = ix * sinA + iz * cosA;
+
+            mArr[i] = rx + (finalCloudCoords[i] - rx) * ease;
+            mArr[i + 1] = iy + (finalCloudCoords[i + 1] - iy) * ease;
+            mArr[i + 2] = rz + (finalCloudCoords[i + 2] - rz) * ease;
+        }
+        mainAttr.needsUpdate = true;
+
+        const spkAttr = sparkleGeo.attributes.position;
+        const sArr = spkAttr.array;
+        const sInit = sparkleStarBuffers.initArr;
+        for (let i = 0; i < finalSparkleCoords.length; i += 3) {
+            const ix = sInit[i];
+            const iy = sInit[i + 1];
+            const iz = sInit[i + 2];
+
+            const rx = ix * cosA - iz * sinA;
+            const rz = ix * sinA + iz * cosA;
+
+            const floatOffset = ease * Math.sin(elapsed * 2.5 + i) * 0.025;
+
+            sArr[i] = rx + (finalSparkleCoords[i] - rx) * ease;
+            sArr[i + 1] = iy + (finalSparkleCoords[i + 1] - iy) * ease + floatOffset;
+            sArr[i + 2] = rz + (finalSparkleCoords[i + 2] - rz) * ease;
+        }
+        spkAttr.needsUpdate = true;
+    };
 
     const renderScene3D = () => {
         requestAnimationFrame(renderScene3D);
         const elapsed = timer.getElapsedTime();
 
-        if (elapsed <= INTRO_TIME) {
-            const ratio = Math.min(elapsed / INTRO_TIME, 1);
-            const ease = 1 - Math.pow(1 - ratio, 3);
+        if (!isLightMode) {
+            solidCrane.visible = true;
+            darkWireCrane.visible = true;
+            coreMesh.visible = true;
+            cranePointCloud.visible = false;
+            sparklePointCloud.visible = false;
 
-            const attr = meshGeo.attributes.position;
-            for (let i = 0; i < finalVerts.length; i++) {
-                attr.array[i] = initVerts[i] + (finalVerts[i] - initVerts[i]) * ease;
+            if (elapsed <= INTRO_TIME) {
+                const ratio = Math.min(elapsed / INTRO_TIME, 1);
+                const ease = 1 - Math.pow(1 - ratio, 3);
+
+                const attr = meshGeo.attributes.position;
+                for (let i = 0; i < finalVerts.length; i++) {
+                    attr.array[i] = initVerts[i] + (finalVerts[i] - initVerts[i]) * ease;
+                }
+                attr.needsUpdate = true;
+                meshGeo.computeVertexNormals();
+
+                bodyMaterial.opacity = ease * 0.95;
+
+                if (ratio > 0.65) {
+                    const subRatio = (ratio - 0.65) / 0.35;
+                    edgeMaterial.opacity = subRatio * 0.7;
+                    darkWireCrane.scale.setScalar(0.92 + subRatio * 0.08);
+                }
+
+                coreMesh.scale.setScalar(ease);
+                craneRoot.rotation.y = (1 - ease) * Math.PI * 1.5 + elapsed * 0.2;
+            } else {
+                bodyMaterial.opacity = 0.95;
+                edgeMaterial.opacity = 0.7;
+                darkWireCrane.scale.setScalar(1);
+                craneRoot.rotation.y = elapsed * 0.2;
+                coreMesh.scale.setScalar(1 + Math.sin(elapsed * 4) * 0.15);
             }
-            attr.needsUpdate = true;
-            meshGeo.computeVertexNormals();
-
-            bodyMaterial.opacity = isLightMode ? 0 : ease * 0.95;
-
-            if (ratio > 0.65) {
-                const subRatio = (ratio - 0.65) / 0.35;
-                edgeMaterial.opacity = isLightMode ? subRatio * 0.6 : subRatio * 0.7;
-                cadWireMat.opacity = isLightMode ? subRatio * 0.28 : 0;
-                pointCloudMat.opacity = isLightMode ? subRatio * 0.95 : 0;
-
-                const s = 0.92 + subRatio * 0.08;
-                darkWireCrane.scale.setScalar(s);
-                cadWireMesh.scale.setScalar(s);
-                cranePointCloud.scale.setScalar(s);
-            }
-
-            coreMesh.visible = !isLightMode;
-            coreMesh.scale.setScalar(ease);
-            craneRoot.rotation.y = (1 - ease) * Math.PI * 1.5 + elapsed * 0.2;
         } else {
-            bodyMaterial.opacity = isLightMode ? 0 : 0.95;
-            edgeMaterial.opacity = isLightMode ? 0.65 : 0.7;
-            cadWireMat.opacity = isLightMode ? 0.28 : 0;
-            pointCloudMat.opacity = isLightMode ? 0.95 : 0;
+            solidCrane.visible = false;
+            darkWireCrane.visible = false;
+            coreMesh.visible = false;
+            bodyMaterial.opacity = 0;
+            edgeMaterial.opacity = 0;
 
-            darkWireCrane.scale.setScalar(1);
-            cadWireMesh.scale.setScalar(1);
-            cranePointCloud.scale.setScalar(1);
+            cranePointCloud.visible = true;
+            sparklePointCloud.visible = true;
 
-            coreMesh.visible = !isLightMode;
-            craneRoot.rotation.y = elapsed * 0.2;
-            coreMesh.scale.setScalar(1 + Math.sin(elapsed * 4) * 0.15);
+            const starElapsed = elapsed - lightModeStartTime;
+            const starRatio = Math.min(Math.max(starElapsed / INTRO_TIME, 0), 1);
+            const starEase = 1 - Math.pow(1 - starRatio, 3);
+
+            updateStarFormation(starRatio, elapsed);
+
+            pointCloudMat.opacity = Math.min(1, starEase * 1.15);
+            sparkleMat.opacity = starEase * (0.85 + Math.sin(elapsed * 3.5) * 0.15);
+            sparkleMat.size = 0.26 + Math.sin(elapsed * 4) * 0.04;
+
+            craneRoot.rotation.y = (1 - starEase) * Math.PI * 0.8 + elapsed * 0.2;
         }
 
         craneRoot.position.y = Math.sin(elapsed * 1.5) * 0.4;
@@ -363,8 +535,8 @@ document.addEventListener("DOMContentLoaded", () => {
             isLightMode = document.body.classList.contains("light-mode");
 
             if (isLightMode) {
-                edgeMaterial.color.setHex(0x334155);
                 ambLight.intensity = 1.1;
+                lightModeStartTime = timer.getElapsedTime();
             } else {
                 edgeMaterial.color.setHex(0x8da4ff);
                 ambLight.intensity = 0.6;
