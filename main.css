@@ -5,22 +5,54 @@
   --bg-dark: #0D1526;
   --text-white: #ffffff;
   --text-gray: #9ca3af;
-  --accent-blue: #8da4ff; /* Xanh lơ công nghệ */
+  --accent-blue: #8da4ff;
+  /* Xanh lơ công nghệ */
 }
 
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--bg-dark);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
   color: var(--text-white);
   font-family: 'Inter', sans-serif;
   overflow: hidden;
-  height: 100vh;
   position: relative;
+  background-color: #030712;
+  /* Nền đen sâu (chuẩn Slate-950 của Tailwind) */
+
+  /* ==========================================================================
+     PHONG CÁCH BACKGROUND CHUẨN TAILWIND CSS:
+     - Lớp 1: Đốm sáng Spotlight (Cyan & Tím) rọi sau con hạc và tiêu đề
+     - Lớp 2: Lưới kẻ vuông (Grid Lines) tinh tế kích thước 40px x 40px
+     ========================================================================== */
+  background-image:
+    /* Chùm sáng tím xanh tỏa ra từ góc trên bên phải (chỗ con hạc 3D) */
+    radial-gradient(circle 800px at 75% 40%, rgba(56, 189, 248, 0.12), transparent 70%),
+    /* Chùm sáng tím nhẹ phía sau trục chữ ARISE */
+    radial-gradient(circle 600px at 20% 50%, rgba(168, 85, 247, 0.08), transparent 70%),
+    /* Lưới kẻ ngang */
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    /* Lưới kẻ dọc */
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+
+  /* Kích thước ô lưới: mỗi ô 40px x 40px */
+  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+}
+
+/* Thêm lớp viền mờ tối dần về 4 góc (Vignette) để tạo chiều sâu chuẩn Sci-Fi */
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, #030712 90%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ==========================================================================
@@ -32,15 +64,17 @@ body {
   align-items: center;
   padding: 30px 60px;
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  transform-origin: center top; 
+  transform-origin: center top;
   transform: scale(1);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .navbar:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .nav-left {
@@ -62,7 +96,9 @@ body {
   line-height: 1.4;
 }
 
-.brand-title { font-weight: 600; }
+.brand-title {
+  font-weight: 600;
+}
 
 .brand-subtitle {
   color: var(--accent-blue);
@@ -104,8 +140,7 @@ body {
   /* 2. Tạo viền hào quang Gradient đa tầng: 
         Lớp trong: Xanh lơ (#8da4ff)
         Lớp ngoài: Tím neon (#aa00ff) hoặc Cam (#ff8800) */
-  filter: drop-shadow(0 0 5px rgba(141, 164, 255, 0.8))
-          drop-shadow(0 0 12px rgba(170, 0, 255, 0.6));
+  filter: drop-shadow(0 0 5px rgba(141, 164, 255, 0.8)) drop-shadow(0 0 12px rgba(170, 0, 255, 0.6));
 
   /* 3. Nhích nhẹ lên trên một xíu tạo cảm giác tương tác nổi */
   transform: translateY(-2px);
@@ -117,8 +152,9 @@ body {
 .hero-section {
   display: flex;
   height: 100vh;
-  padding: 120px 60px 0 60px; /* Đẩy xuống tránh đè Navbar */
-  align-items: center; 
+  padding: 120px 60px 0 60px;
+  /* Đẩy xuống tránh đè Navbar */
+  align-items: center;
 }
 
 /* --- Cột Chữ (Bên trái) --- */
@@ -126,7 +162,7 @@ body {
   flex: 1;
   max-width: 600px;
   z-index: 10;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .main-title {
@@ -136,19 +172,26 @@ body {
 }
 
 /* SỬ DỤNG CSS GRID ĐỂ CĂN THẲNG TRỤC CHỮ A-R-I-S-E */
+/* Tìm đến đoạn code này trong file của bạn */
 .title-row {
   display: grid;
-  grid-template-columns: 85px auto; /* Cột 1 rộng 85px chứa chữ cái đầu */
-  align-items: baseline; 
-  line-height: 1.1; /* Tăng khoảng cách dòng lên một chút */
+  /* THAY ĐỔI ĐOẠN NÀY: Thay vì 85px, hãy dùng max-content */
+  grid-template-columns: max-content auto; 
+  align-items: baseline;
+  line-height: 1.1;
+  /* Thêm khoảng cách nhỏ vừa đủ giữa 2 cột (ví dụ: 10px) */
+  gap: 10px; 
 }
 
+
 .first-letter {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-weight: 900;
-  font-size: clamp(3.5rem, 6.5vw, 7rem); /* Làm chữ to lên một chút */
-  text-align: center; /* Đảm bảo căn giữa trong cột 85px */
-  
+  font-size: clamp(3.5rem, 6.5vw, 7rem);
+  /* Làm chữ to lên một chút */
+  text-align: center;
+  /* Đảm bảo căn giữa trong cột 85px */
+
   /* Hiệu ứng màu gradient chìm và phát sáng xanh lơ */
   background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
   background-clip: text;
@@ -158,7 +201,7 @@ body {
 }
 
 .rest-letter {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-size: clamp(3rem, 5.5vw, 5.5rem);
   font-weight: 900;
   letter-spacing: -0.02em;
@@ -170,27 +213,28 @@ body {
   color: var(--text-gray);
   max-width: 90%;
   letter-spacing: 0.5px;
-  margin-left: 10px; /* Thụt vào tí xíu cho cân đối */
+  margin-left: 10px;
+  /* Thụt vào tí xíu cho cân đối */
 }
 
 /* --- Cột 3D Hạc Origami (Bên phải) --- */
 .robot-3d-wrapper {
   position: absolute;
-  right: -5%; 
+  right: -5%;
   top: 0;
-  width: 65%; 
-  height: 100%; 
-  z-index: 5; 
+  width: 65%;
+  height: 100%;
+  z-index: 5;
 }
 
 #robot-canvas-container {
   width: 100%;
   height: 100%;
-  cursor: grab; 
+  cursor: grab;
 }
 
 #robot-canvas-container:active {
-  cursor: grabbing; 
+  cursor: grabbing;
 }
 
 .drag-hint {
@@ -208,14 +252,16 @@ body {
    4. RESPONSIVE CHO ĐIỆN THOẠI & TABLET
    ========================================================================== */
 @media (max-width: 900px) {
-  body { overflow: auto; }
+  body {
+    overflow: auto;
+  }
 
   .navbar {
     padding: 20px;
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .nav-right {
     flex-wrap: wrap;
     justify-content: center;
@@ -223,7 +269,7 @@ body {
 
   .hero-section {
     flex-direction: column;
-    padding: 180px 20px 0 20px; 
+    padding: 180px 20px 0 20px;
     justify-content: flex-start;
   }
 
@@ -232,7 +278,8 @@ body {
   }
 
   .title-row {
-    grid-template-columns: 60px auto; /* Thu nhỏ cột chữ cái đầu trên mobile */
+    grid-template-columns: 60px auto;
+    /* Thu nhỏ cột chữ cái đầu trên mobile */
   }
 
   .first-letter {
@@ -252,9 +299,11 @@ body {
     position: relative;
     right: 0;
     width: 100%;
-    height: 50vh; 
+    height: 50vh;
     margin-top: 40px;
   }
-  
-  .drag-hint { bottom: 10px; }
+
+  .drag-hint {
+    bottom: 10px;
+  }
 }
