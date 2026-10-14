@@ -5,47 +5,37 @@
   --bg-dark: #0D1526;
   --text-white: #ffffff;
   --text-gray: #9ca3af;
-  --accent-blue: #8da4ff;
-  /* Xanh lơ công nghệ */
+  --accent-blue: #8da4ff; /* Xanh lơ công nghệ */
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+  background-color: var(--bg-dark);
   color: var(--text-white);
   font-family: 'Inter', sans-serif;
-  overflow: hidden;
+  min-height: 100vh;
+  /* XÓA DÒNG overflow: hidden; NẾU CÓ, THAY BẰNG 2 DÒNG DƯỚI: */
+  overflow-x: hidden; /* Khóa cuộn ngang */
+  overflow-y: auto;   /* Bật cuộn dọc */
   position: relative;
-  background-color: #030712;
-  /* Nền đen sâu (chuẩn Slate-950 của Tailwind) */
 
-  /* ==========================================================================
-     PHONG CÁCH BACKGROUND CHUẨN TAILWIND CSS:
-     - Lớp 1: Đốm sáng Spotlight (Cyan & Tím) rọi sau con hạc và tiêu đề
-     - Lớp 2: Lưới kẻ vuông (Grid Lines) tinh tế kích thước 40px x 40px
-     ========================================================================== */
-  background-image:
-    /* Chùm sáng tím xanh tỏa ra từ góc trên bên phải (chỗ con hạc 3D) */
-    radial-gradient(circle 800px at 75% 40%, rgba(56, 189, 248, 0.12), transparent 70%),
-    /* Chùm sáng tím nhẹ phía sau trục chữ ARISE */
-    radial-gradient(circle 600px at 20% 50%, rgba(168, 85, 247, 0.08), transparent 70%),
-    /* Lưới kẻ ngang */
-    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    /* Lưới kẻ dọc */
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-
-  /* Kích thước ô lưới: mỗi ô 40px x 40px */
-  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  background-image: 
+    radial-gradient(circle 900px at 50% 50%, rgba(56, 189, 248, 0.08), transparent 75%),
+    radial-gradient(circle 700px at 80% 80%, rgba(245, 158, 11, 0.04), transparent 70%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 45px 45px, 45px 45px;
+}
+html {
+  scroll-behavior: smooth; /* Hiệu ứng cuộn trang mượt mà */
 }
 
-/* Thêm lớp viền mờ tối dần về 4 góc (Vignette) để tạo chiều sâu chuẩn Sci-Fi */
+
 body::before {
   content: '';
   position: absolute;
@@ -64,17 +54,15 @@ body::before {
   align-items: center;
   padding: 30px 60px;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 100;
-  transform-origin: center top;
+  transform-origin: center top; 
   transform: scale(1);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .navbar:hover {
-  transform: scale(1.05);
+  transform: scale(1.05); 
 }
 
 .nav-left {
@@ -96,9 +84,7 @@ body::before {
   line-height: 1.4;
 }
 
-.brand-title {
-  font-weight: 600;
-}
+.brand-title { font-weight: 600; }
 
 .brand-subtitle {
   color: var(--accent-blue);
@@ -115,7 +101,6 @@ body::before {
   gap: 30px;
 }
 
-/* Trạng thái bình thường của các nút Menu */
 .nav-right a {
   color: var(--text-white);
   text-decoration: none;
@@ -127,34 +112,30 @@ body::before {
   position: relative;
 }
 
-/* ==========================================================================
-   HIỆU ỨNG KHI DI CHUỘT (HOVER): CHỮ VÀ VIỀN BÓNG GRADIENT PHÁT SÁNG
-   ========================================================================== */
 .nav-right a:hover {
-  /* 1. Đổi màu bản thân chữ thành Gradient (Trắng pha Xanh lơ) */
-  background: linear-gradient(90deg, #ffffff 0%, var(--accent-blue) 100%);
+  /* 1. Bản thân chữ chuyển Gradient: Vàng sáng -> Cam rực */
+  background: linear-gradient(90deg, #fff3b0 0%, #ff9e00 60%, #ff5400 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  /* 2. Tạo viền hào quang Gradient đa tầng: 
-        Lớp trong: Xanh lơ (#8da4ff)
-        Lớp ngoài: Tím neon (#aa00ff) hoặc Cam (#ff8800) */
-  filter: drop-shadow(0 0 5px rgba(141, 164, 255, 0.8)) drop-shadow(0 0 12px rgba(170, 0, 255, 0.6));
+  /* 2. Viền bóng Gradient Glow 2 tầng màu Cam:
+        - Tầng trong: Vàng hổ phách sáng (#ffb703)
+        - Tầng ngoài: Cam neon rực lửa (#ff4500) */
+  filter: drop-shadow(0 0 5px rgba(255, 183, 3, 0.9))
+          drop-shadow(0 0 14px rgba(255, 69, 0, 0.65));
 
-  /* 3. Nhích nhẹ lên trên một xíu tạo cảm giác tương tác nổi */
+  /* 3. Nhích nhẹ lên trên khi rê chuột vào */
   transform: translateY(-2px);
 }
-
 /* ==========================================================================
    3. HERO SECTION (BỐ CỤC CHÍNH)
    ========================================================================== */
 .hero-section {
   display: flex;
   height: 100vh;
-  padding: 120px 60px 0 60px;
-  /* Đẩy xuống tránh đè Navbar */
-  align-items: center;
+  padding: 120px 60px 0 60px; /* Đẩy xuống tránh đè Navbar */
+  align-items: center; 
 }
 
 /* --- Cột Chữ (Bên trái) --- */
@@ -162,7 +143,7 @@ body::before {
   flex: 1;
   max-width: 600px;
   z-index: 10;
-  pointer-events: none;
+  pointer-events: none; 
 }
 
 .main-title {
@@ -170,9 +151,6 @@ body::before {
   flex-direction: column;
   margin-bottom: 24px;
 }
-
-/* SỬ DỤNG CSS GRID ĐỂ CĂN THẲNG TRỤC CHỮ A-R-I-S-E */
-/* Tìm đến đoạn code này trong file của bạn */
 .title-row {
   display: grid;
   /* THAY ĐỔI ĐOẠN NÀY: Thay vì 85px, hãy dùng max-content */
@@ -183,15 +161,12 @@ body::before {
   gap: 10px; 
 }
 
-
 .first-letter {
-  font-family: 'Space Mono', monospace;
+  font-family: 'Mono Space' monospace;
   font-weight: 900;
-  font-size: clamp(3.5rem, 6.5vw, 7rem);
-  /* Làm chữ to lên một chút */
-  text-align: center;
-  /* Đảm bảo căn giữa trong cột 85px */
-
+  font-size: clamp(3.5rem, 6.5vw, 7rem); /* Làm chữ to lên một chút */
+  text-align: center; /* Đảm bảo căn giữa trong cột 85px */
+  
   /* Hiệu ứng màu gradient chìm và phát sáng xanh lơ */
   background: linear-gradient(180deg, #ffffff 20%, var(--accent-blue) 100%);
   background-clip: text;
@@ -201,7 +176,7 @@ body::before {
 }
 
 .rest-letter {
-  font-family: 'Space Mono', monospace;
+  font-family: 'MonoSpace' monospace;
   font-size: clamp(3rem, 5.5vw, 5.5rem);
   font-weight: 900;
   letter-spacing: -0.02em;
@@ -213,28 +188,27 @@ body::before {
   color: var(--text-gray);
   max-width: 90%;
   letter-spacing: 0.5px;
-  margin-left: 10px;
-  /* Thụt vào tí xíu cho cân đối */
+  margin-left: 10px; /* Thụt vào tí xíu cho cân đối */
 }
 
 /* --- Cột 3D Hạc Origami (Bên phải) --- */
 .robot-3d-wrapper {
   position: absolute;
-  right: -5%;
+  right: -5%; 
   top: 0;
-  width: 65%;
-  height: 100%;
-  z-index: 5;
+  width: 65%; 
+  height: 100%; 
+  z-index: 5; 
 }
 
 #robot-canvas-container {
   width: 100%;
   height: 100%;
-  cursor: grab;
+  cursor: grab; 
 }
 
 #robot-canvas-container:active {
-  cursor: grabbing;
+  cursor: grabbing; 
 }
 
 .drag-hint {
@@ -252,16 +226,14 @@ body::before {
    4. RESPONSIVE CHO ĐIỆN THOẠI & TABLET
    ========================================================================== */
 @media (max-width: 900px) {
-  body {
-    overflow: auto;
-  }
+  body { overflow: auto; }
 
   .navbar {
     padding: 20px;
     flex-direction: column;
     gap: 15px;
   }
-
+  
   .nav-right {
     flex-wrap: wrap;
     justify-content: center;
@@ -269,7 +241,7 @@ body::before {
 
   .hero-section {
     flex-direction: column;
-    padding: 180px 20px 0 20px;
+    padding: 180px 20px 0 20px; 
     justify-content: flex-start;
   }
 
@@ -278,8 +250,7 @@ body::before {
   }
 
   .title-row {
-    grid-template-columns: 60px auto;
-    /* Thu nhỏ cột chữ cái đầu trên mobile */
+    grid-template-columns: 60px auto; /* Thu nhỏ cột chữ cái đầu trên mobile */
   }
 
   .first-letter {
@@ -299,11 +270,10 @@ body::before {
     position: relative;
     right: 0;
     width: 100%;
-    height: 50vh;
+    height: 50vh; 
     margin-top: 40px;
   }
-
-  .drag-hint {
-    bottom: 10px;
-  }
+  
+  .drag-hint { bottom: 10px; }
+  
 }
