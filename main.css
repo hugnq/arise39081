@@ -5,7 +5,7 @@
   --bg-dark: #0D1526;
   --text-white: #ffffff;
   --text-gray: #9ca3af;
-  --accent-blue: #8da4ff; /* Xanh lơ công nghệ */
+  --accent-blue: #8da4ff;
 }
 
 * { 
@@ -23,13 +23,13 @@ body {
   color: var(--text-white);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  overflow-y: auto; /* Cho phép cuộn dọc xuống Trang 2 */
+  overflow-y: auto;
   min-height: 100vh;
   position: relative;
 }
 
 /* ==========================================================================
-   BACKGROUND BẦU TRỜI SAO ĐỘNG (STARFIELD)
+   BACKGROUND 
    ========================================================================== */
 #starfield {
   position: fixed;
@@ -120,7 +120,7 @@ body {
 }
 
 /* ==========================================================================
-   3. TRANG 1: HERO SECTION (BỐ CỤC CHÍNH)
+   3. PAGE 1: HERO SECTION 
    ========================================================================== */
 .hero-section {
   display: flex;
@@ -131,7 +131,6 @@ body {
   z-index: 1;
 }
 
-/* --- Cột Chữ (Bên trái) --- */
 .text-content {
   flex: 1;
   max-width: 600px;
@@ -171,7 +170,6 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* Định dạng Slogan */
 .slogan-badge {
   display: flex;
   align-items: center;
@@ -194,7 +192,7 @@ body {
   letter-spacing: 1px;
 }
 
-/* --- Cột 3D Hạc Origami (Bên phải) --- */
+
 .robot-3d-wrapper {
   position: absolute;
   right: -5%; 
@@ -214,7 +212,7 @@ body {
   cursor: grabbing; 
 }
 
-/* --- Nút SCROLL FOR MORE ở cuối Trang 1 --- */
+/* scroll for more */
 .scroll-more-btn {
   position: absolute;
   bottom: 24px;
@@ -278,17 +276,17 @@ body {
 }
 
 /* ==========================================================================
-   4. TRANG 2: ABOUT US SECTION (ĐƯA LÊN ĐẦU TRANG & HIỆU ỨNG MỜ -> RÕ DẦN)
+   4. PAGE 2: ABOUT US SECTION)
    ========================================================================== */
 .about-section {
   min-height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Đẩy nội dung lên phía trên đầu trang 2 */
+  align-items: flex-start;
   position: relative;
   z-index: 1;
-  padding: 130px 40px 80px 40px; /* Cách phía trên 130px để nằm ngay dưới Navbar */
+  padding: 130px 40px 80px 40px;
   overflow: hidden;
 }
 
@@ -314,7 +312,7 @@ body {
   margin-bottom: 20px;
 }
 
-/* Trạng thái ban đầu: Mờ (opacity: 0 + blur) */
+
 .fade-in-word {
   display: inline-block;
   opacity: 0;
@@ -331,7 +329,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition-delay: 0.15s; /* Chữ US rõ dần ngay sau chữ ABOUT một nhịp nhẹ */
+  transition-delay: 0.15s;
 }
 
 .about-divider {
@@ -361,7 +359,6 @@ body {
   font-weight: 600;
 }
 
-/* Khi cuộn tới Trang 2 (.in-view được kích hoạt bởi main.js) -> Từ mờ thành rõ dần */
 .about-section.in-view .fade-in-word {
   opacity: 1;
   filter: blur(0);
@@ -385,7 +382,7 @@ body {
 }
 
 /* ==========================================================================
-   5. RESPONSIVE CHO ĐIỆN THOẠI & TABLET
+   5. FOR MOBILE DEVICES
    ========================================================================== */
 @media (max-width: 900px) {
   .navbar {
