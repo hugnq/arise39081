@@ -544,7 +544,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Xử lý tiện ích tùy chỉnh ngôn ngữ (Language Dropdown)
     const langDropdown = document.getElementById("lang-dropdown");
     const langToggleBtn = document.getElementById("lang-toggle");
     const langLabelEl = document.getElementById("lang-label");
@@ -621,7 +620,6 @@ document.addEventListener("DOMContentLoaded", () => {
             targetElements.forEach((el) => el && el.classList.add("lang-switching"));
 
             setTimeout(() => {
-                // Đổi chữ "Language" trên nút thành ngôn ngữ vừa chọn ("English" hoặc "Tiếng Việt")
                 if (langLabelEl) langLabelEl.textContent = data.langName;
                 if (brandSubtitleEl) brandSubtitleEl.textContent = data.brandSubtitle;
                 if (navHomeEl) navHomeEl.textContent = data.navHome;
