@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     /* ==========================================================================
-       1. HIỆU ỨNG BACKGROUND BẦU TRỜI SAO ĐỘNG (DI CHUYỂN QUA LẠI)
+       1. BACKGROUND
        ========================================================================== */
     const starCanvas = document.getElementById("starfield");
     const ctx = starCanvas.getContext("2d");
@@ -20,16 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 x: Math.random() * starCanvas.width,
                 y: Math.random() * starCanvas.height,
                 radius: Math.random() * 1.8 + 0.4,
-                // Vận tốc trôi qua lại theo cả chiều ngang và dọc
                 vx: (Math.random() - 0.5) * 0.45,
                 vy: (Math.random() - 0.5) * 0.45,
-                // Dao động lượn sóng nhẹ để đốm sáng bay tự nhiên hơn
                 angle: Math.random() * Math.PI * 2,
                 angleSpeed: Math.random() * 0.02 + 0.005,
                 swayRange: Math.random() * 0.35,
                 alpha: Math.random() * 0.7 + 0.3,
                 twinkleSpeed: (Math.random() * 0.015 + 0.005) * (Math.random() < 0.5 ? 1 : -1),
-                // Phối màu trắng và xanh lơ công nghệ (#8da4ff)
                 color: Math.random() > 0.35 ? "#ffffff" : "#8da4ff"
             });
         }
@@ -41,18 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 0; i < stars.length; i++) {
             const s = stars[i];
 
-            // Cập nhật góc dao động qua lại
             s.angle += s.angleSpeed;
             s.x += s.vx + Math.cos(s.angle) * s.swayRange;
             s.y += s.vy + Math.sin(s.angle) * s.swayRange;
 
-            // Cho các đốm sáng lặp lại khi đi qua rìa màn hình
             if (s.x < 0) s.x = starCanvas.width;
             if (s.x > starCanvas.width) s.x = 0;
             if (s.y < 0) s.y = starCanvas.height;
             if (s.y > starCanvas.height) s.y = 0;
 
-            // Hiệu ứng nhấp nháy
             s.alpha += s.twinkleSpeed;
             if (s.alpha > 1) {
                 s.alpha = 1;
@@ -62,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 s.twinkleSpeed *= -1;
             }
 
-            // Vẽ đốm sáng kèm hào quang nhẹ
+
             ctx.save();
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
@@ -86,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* ==========================================================================
-       2. MÔ HÌNH HẠC ORIGAMI 3D & ANIMATION LẮP GHÉP KHI MỞ WEB
+       2. HẠC
        ========================================================================== */
     const container = document.getElementById("robot-canvas-container");
     const width = container.clientWidth;
@@ -106,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
     controls.dampingFactor = 0.05;
     controls.enableZoom = true;
 
-    // Ánh sáng
+
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
@@ -121,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const birdGroup = new THREE.Group();
     scene.add(birdGroup);
 
-    // Tọa độ các đỉnh gốc của Hạc Origami
+
     const baseVertices = new Float32Array([
          5.0,  3.0,  0.0,
          3.5,  4.5,  0.0,
@@ -150,26 +144,24 @@ document.addEventListener("DOMContentLoaded", function () {
         11, 13, 14,  14, 13, 12,  12, 13, 6,  11, 6, 13
     ];
 
-    // Tạo Geometry chuẩn để lấy khung dây (Wireframe)
+
     const indexedGeo = new THREE.BufferGeometry();
     indexedGeo.setAttribute("position", new THREE.BufferAttribute(baseVertices, 3));
     indexedGeo.setIndex(indices);
     indexedGeo.computeVertexNormals();
 
-    // Tách các mặt tam giác độc lập (Non-Indexed) để tạo hiệu ứng từng mảnh bay vào ghép thành con hạc
+
     const craneGeo = indexedGeo.toNonIndexed();
     const targetPositions = craneGeo.attributes.position.array.slice();
     const startPositions = new Float32Array(targetPositions.length);
     const currentPositions = new Float32Array(targetPositions.length);
 
-    // Tính vị trí phân tán ban đầu cho từng mảnh tam giác
     for (let i = 0; i < targetPositions.length; i += 9) {
-        // Tâm của mảnh tam giác
+
         const cx = (targetPositions[i] + targetPositions[i + 3] + targetPositions[i + 6]) / 3;
         const cy = (targetPositions[i + 1] + targetPositions[i + 4] + targetPositions[i + 7]) / 3;
         const cz = (targetPositions[i + 2] + targetPositions[i + 5] + targetPositions[i + 8]) / 3;
 
-        // Đẩy mảnh tam giác ra xa theo hướng ngẫu nhiên trong không gian
         const spreadDist = 12 + Math.random() * 14;
         const rx = (Math.random() - 0.5) * spreadDist + cx * 2.2;
         const ry = (Math.random() - 0.5) * spreadDist + cy * 2.2;
@@ -201,7 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const craneSolid = new THREE.Mesh(craneGeo, solidMat);
     birdGroup.add(craneSolid);
 
-    // Khung dây phát sáng xuất hiện khi các mảnh ghép khớp lại
     const edges = new THREE.EdgesGeometry(indexedGeo);
     const wireMat = new THREE.LineBasicMaterial({
         color: 0x8da4ff,
@@ -211,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const craneWire = new THREE.LineSegments(edges, wireMat);
     birdGroup.add(craneWire);
 
-    // Lõi năng lượng (Heart Core)
     const coreGeo = new THREE.IcosahedronGeometry(0.8, 0);
     const coreMat = new THREE.MeshStandardMaterial({
         color: 0xffffff,
@@ -230,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
     birdGroup.rotation.z = Math.PI / 12;
 
     const clock = new THREE.Clock();
-    const ASSEMBLY_DURATION = 2.6; // Thời gian hiệu ứng tạo nên con hạc (giây)
+    const ASSEMBLY_DURATION = 2.6;
 
     function easeOutCubic(t) {
         return 1 - Math.pow(1 - t, 3);
@@ -240,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
         requestAnimationFrame(animate3D);
         const time = clock.getElapsedTime();
 
-        // Tiến trình lắp ghép con hạc khi mới mở trang
         if (time <= ASSEMBLY_DURATION) {
             const progress = Math.min(time / ASSEMBLY_DURATION, 1);
             const eased = easeOutCubic(progress);
@@ -252,7 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
             posAttr.needsUpdate = true;
             craneGeo.computeVertexNormals();
 
-            // Tăng dần độ rõ của thân hạc và khung lưới
             solidMat.opacity = eased * 0.95;
             if (progress > 0.65) {
                 const wireProgress = (progress - 0.65) / 0.35;
@@ -260,12 +248,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 craneWire.scale.setScalar(0.92 + wireProgress * 0.08);
             }
 
-            // Lõi năng lượng lớn dần từ tâm
             heartCore.scale.setScalar(eased);
-            // Hiệu ứng xoay hội tụ khi khởi tạo
             birdGroup.rotation.y = (1 - eased) * Math.PI * 1.5 + time * 0.2;
         } else {
-            // Đảm bảo giữ nguyên hình dáng chuẩn sau khi ghép xong
             solidMat.opacity = 0.95;
             wireMat.opacity = 0.7;
             craneWire.scale.setScalar(1);
@@ -274,7 +259,6 @@ document.addEventListener("DOMContentLoaded", function () {
             heartCore.scale.setScalar(1 + Math.sin(time * 4) * 0.15);
         }
 
-        // Chuyển động bay lơ lửng nhịp nhàng
         birdGroup.position.y = Math.sin(time * 1.5) * 0.4;
         heartCore.rotation.x -= 0.02;
         heartCore.rotation.y += 0.03;
@@ -294,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* ==========================================================================
-       3. HIỆU ỨNG CUỘN TRANG 2: TIÊU ĐỀ "ABOUT US" BAY TỪ NGOÀI VÀO GIỮA TRANG
+       3. ABOUT US
        ========================================================================== */
     const aboutSection = document.getElementById("about-section");
 
@@ -304,13 +288,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (entry.isIntersecting) {
                     aboutSection.classList.add("in-view");
                 } else {
-                    // Reset lại để mỗi lần cuộn xuống đều thấy hiệu ứng bay vào
                     aboutSection.classList.remove("in-view");
                 }
             });
         },
         {
-            threshold: 0.25 // Kích hoạt khi 25% Trang 2 xuất hiện trên màn hình
+            threshold: 0.25
         }
     );
 
